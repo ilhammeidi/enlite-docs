@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>Enlite Prime - Firebase Documentation</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Syntax Hightlighter CSS -->
+    <link href="../css/prism.css" rel="stylesheet">
+  
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="logo">
+                        <img src="../images/logo.png" alt="logo" />
+                    </a>
+                </li>
+                <li>
+                    <a href="#get_api" class="cur">Get API Key</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)">Authentication</a>
+                    <ul class="submenu">
+                      <li><a href="#email">Email</a></li>
+                      <li><a href="#google">Google</a></li>
+                      <li><a href="#twitter">Twitter</a></li>
+                      <li><a href="#github">Github</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#storage">Realtime DB and Storage</a>
+                </li>
+                <li>
+                    <a href="#dump_data">Import dump data (optional)</a>
+                </li>
+            </ul>
+            <a class="back" href="../index.html"><i class="glyphicon glyphicon-arrow-left"></i> Back to Main Docs</a>
+            <span class="copy">&copy; Copyright 2019 - Enlite Prime</span>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- main content -->
+        <div id="page-content-wrapper">
+          <div class="container-fluid">
+            <!-- GET API -->
+            <section class="row" id="get_api">
+                <p>All this guide in this documentation get from <a href="https://firebase.google.com/docs/guides">https://firebase.google.com/docs/guides</a></p>
+                <br /><br />
+                <div class="col-lg-10">
+                    <h1>Get API Key</h1>
+                    <hr />
+                    Before you can add Firebase to your JavaScript app, you need to create a Firebase project to connect to your app.
+                    <ul>
+                      <li><a href="https://console.firebase.google.com/">Sign into Firebase </a> using your Google account.</li>
+                      <li>Add new projects</li>
+                      <li>
+                        Enter your project name.
+                        <br />
+                        <img src="../images/firebase_project_name.png" alt="firebase project name" />
+                      </li>
+                      <li>Click <strong>Create Project.</strong></li>
+                      <li>You're project has been create. Next, click the Settings icon <img src="../images/setting_firebase.png" width="32" alt="Settings Icons" />, then select Project settings.</li>
+                      <li>
+                        In the Your apps card, click the web icon platform
+                        <br />
+                        <img src="../images/firebase_api.png" alt="firebase project name" />
+                      </li>
+                      <li>
+                        Then add Firebase to your web app
+                        <ol>
+                          <li>
+                            Enter App nickname
+                            <br />
+                            <img src="../images/firebase_add_app.png" alt="firebase project name" />
+                          </li>
+                          <li>Click <strong>Register App</strong></li>
+                        </ol>
+                      </li>
+                      <li>
+                        Back to Your apps card, and choose you're recently created app
+                      </li>
+                       <li>
+                        Then copy the you're config script
+                         <br />
+                        <img src="../images/firebase_config_key.png" alt="firebase project name" />
+                      </li>
+                      <li>Paste in <code>app/firebase/config.js</code></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END -->
+            <!-- AUTH -->
+            <section class="row" id="auth">
+                <div class="col-lg-10">
+                    <h1>Setup Authentication</h1>
+                    <hr />
+                    You can use Firebase Authentication to allow users to sign in to your app using one or more sign-in methods, including email address and password sign-in, and federated identity providers such as Google Sign-in and Twitter Login.
+                    <br /><br />
+                    <div id="email">
+                      <h4>Enable Sign In with Email</h4>
+                      <ul>
+                        <li>
+                          In the <a href="https://console.firebase.google.com/" >Firebase console</a>, open the <strong>Auth</strong> section.
+                          <img src="../images/firebase_emai.png" alt="firebase email" />
+                        </li>
+                        <li>Go to <strong>Sign in method</strong> tab </li>
+                        <li>Enable the <strong>Email/Password</strong> provider. Note that email/password sign-in must be enabled to use email link sign-in.</li>
+                        <li>Click <strong>Save</strong>.</li>
+                      </ul>
+                    </div>
+                    <br /><br />
+                    <div id="google">
+                      <h4>Enable Sign In with Google</h4>
+                      <ul>
+                        <li>
+                          In the <a href="https://console.firebase.google.com/" target="_blank">Firebase console</a>, open the Auth section.
+                          <img src="../images/firebase_google.png" alt="firebase google" />
+                        </li>
+                        <li>On the <b>Sign in method</b> tab, enable the <b>Google</b> sign-in methodand click <b>Save</b>.</li>
+                      </ul>
+                    </div>
+                    <br /><br />
+                    <div id="twitter">
+                      <h4>Enable Sign In with Twitter</h4>
+                      <br />
+                      <h5>A. Register You're App</h5>
+                      <ul>
+                        <li>Go to <a href="https://apps.twitter.com/" target="_blank">Twitter app's config</a>. And sign in with you're twitter account</li>
+                        <li>Click <strong>Create an app</strong></li>
+                        <li>
+                          Enter all require field
+                          <img src="../images/twitter_app.png" alt="twitter" />
+                        </li>
+                        <li>Website URL (required): Enter you're <strong>Firebase authDomain</strong> e.g. <code>mypoject-1234a.firebaseapp.com</code></li>
+                        <li>Click <strong>Create</strong></li>
+                        <li>Back to <a href="https://apps.twitter.com/" target="_blank">Twitter app's config</a>.</li>
+                        <li>Click <strong>Details</strong> to you're project</li>
+                        <li>Go to Tab <strong>Keys and Tokens</strong></li>
+                        <li>
+                          Copy the Consumer API keys both <strong>API key</strong> and <strong>API secret key</strong>
+                          <img src="../images/twitter_token.png" alt="twitter" />
+                        </li>
+                      </ul>
+                      <br />
+                      <h5>B. Firebase Config</h5>
+                      <ul>
+                        <li>Open <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                        <li>Go to <strong>Authentication</strong> &rsaquo; <strong>Sign In Method</strong> &rsaquo; <strong>Twitter</strong></li>
+                        <li>On the <b>Sign in method</b> tab, enable the <b>Twitter</b> sign-in method and specify the <b>API Key</b> and <b>API Secret</b> you got from Twitter.</li>
+                        <li>Paste twitter <strong>API key</strong> to API key field and <strong>API secret key</strong> to API secret field</li>
+                        <li>Click <strong>Save</strong>.</li>
+                        <li>
+                          Then, copy your Firebase <b>redirect URL</b> (e.g. <code>my-app-12345.firebaseapp.com/__/auth/handler</code>)
+                          is set as your <b>Callback URL</b> in your app's settings page on your
+                          <a href="https://apps.twitter.com/" target="_blank">Twitter app's config</a>.
+                          <img src="../images/twitter_callback.png" alt="twitter" />
+                        </li>
+                        <li>Back to <a href="https://apps.twitter.com/" target="_blank">Twitter app's config</a></li>
+                        <li>Click <strong>Details</strong> to you're project then <strong>Edit details</strong></li>
+                        <li><strong>Check</strong> Enable Sign in with Twitter</li>
+                        <li>
+                          And paste the <strong>Callback URLs</strong> field: with callback URL from Firebase (e.g. <code>my-app-12345.firebaseapp.com/__/auth/handler</code>)is set as your <b>Callback URL</b> in your app's settings page on your twitter setting
+                          <img src="../images/twitter_callback2.png" alt="twitter" />
+                        </li>
+                        <li>Click <strong>Save</strong>.</li>
+                        <li>it's done. You can try to test sign in twitter in <a href="http://localhost:3000/login" target="_blank">http://localhost:3001/login</a></li>
+                      </ul>
+                    </div>
+                    <br /><br />
+                    <div id="github">
+                      <h4>Enable Sign In with Github</h4>
+                      <br />
+                      <h5>A. Register You're App</h5>
+                      <ul>
+                        <li>Open <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                        <li>Go to <strong>Authentication</strong> &rsaquo; <strong>Sign In Method</strong> &rsaquo; <strong>Github</strong></li>
+                        <li>On the <b>Sign in method</b> tab, enable the <b>Github</b> sign-in method</li>
+                        <li>
+                          Then, copy your Firebase <b>redirect URL</b> (e.g. <code>my-app-12345.firebaseapp.com/__/auth/handler</code>)
+                          is set as your <b>Callback URL</b> in your app's settings page on your
+                          <a href="https://apps.twitter.com/" target="_blank">Twitter app's config</a>.
+                          <img src="../images/github_callback.png" alt="twitter" />
+                        </li>
+                        <li>Click <strong>Save</strong>.</li>
+                        <li>Go to <a href="https://github.com/settings/developers" target="_blank">Github developer config</a>. And sign in with you're github account</li>
+                        <li>Click <strong>New OAuth App</strong></li>
+                        <li>
+                          Enter all require field
+                          <img src="../images/github_form.png" alt="twitter" />
+                        </li>
+                        <li>Homepage URL (required): Enter you're <strong>Firebase authDomain</strong> e.g. <code>mypoject-1234a.firebaseapp.com</code></li>
+                        <li>
+                          And paste the <strong>Authorization callback URL</strong> field: with callback URL from Firebase (e.g. <code>my-app-12345.firebaseapp.com/__/auth/handler</code>) is set as your <b>Callback URL</b> in your app's settings page on your github setting
+                        </li>
+                        <li>Click <strong>Register Application</strong></li>
+                        <li>Back to <a href="https://github.com/settings/developers" target="_blank">Github Developers Settings</a>.</li>
+                        <li>Click you're project</li>
+                        <li>
+                          Copy both <strong>Client ID</strong> and <strong>Client Secret</strong>
+                          <img src="../images/github_token.png" alt="twitter" />
+                        </li>
+                      </ul>
+                      <h5>B. Firebase Config</h5>
+                      <ul>
+                        <li>Back to <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a></li>
+                        <li>Go to <strong>Authentication</strong> &rsaquo; <strong>Sign In Method</strong> &rsaquo; <strong>Github</strong></li>
+                        <li>
+                          Paste Github <strong>Client ID</strong> to Client ID field and <strong>Client Secret</strong> to Client Secret field
+                          <img src="../images/github_token2.png" alt="github" />
+                        </li>
+                        <li>Click <strong>Save</strong>.</li>
+                        <li>it's done. You can try to test sign in github in <a href="http://localhost:3000/login" target="_blank">http://localhost:3001/login</a></li>
+                      </ul>
+                  </div>
+                </div>
+            </section>
+            <!-- END -->
+            <!-- STORAGE and DB -->
+            <section class="row" id="storage">
+                <br /><br />
+                <div class="col-lg-10">
+                  <h1>Real Time Database</h1>
+                  <hr />
+                  To use Pre-build CRUD apps you need to setup Firebase Database and Store.
+                  The Firebase Realtime Database is a cloud-hosted database. Data is stored as JSON and synchronized in realtime to every connected client.
+                  <br /><br />
+                  <ul>
+                    <li><a href="https://console.firebase.google.com/">Sign into Firebase </a> using your Google account.</li>
+                    <li>Go to <strong>Database</strong> section</li>
+                    <li>Click <strong>Create Database</strong></li>
+                    <li>
+                      On the Top Drop down Database choose <strong>Realtime Database</strong>
+                      <img src="../images/database_choose.png" alt="db" />
+                    </li>
+                    <li>Go to <strong>Rules</strong> tab. To use demo Pre-build CRUD apps you need to allow all of rulles access. Later you should arrange the rules acces as you need.</li>
+                    <li>Open <code>app/firabse.json</code>. Copy all the script</li>
+                    <li>
+                      Then paste in <strong>Rules Editor</strong>
+                      <img src="../images/database_rules.png" alt="db" />
+                    </li>
+                    <li>Click <strong>Publish</strong></li>
+                    <li>Check our pre-build CRUD app i.e. <strong>To Do</strong> <a href="http://localhost:3000/app/pages/todo-firebase" target="_blank">http://localhost:3000/app/pages/todo-firebase</a></li>
+                  </ul>
+                  <br />
+                  <br />
+                  <h1>Storage</h1>
+                  <br />
+                  In this template <strong>Storage</strong> used for upload avatar images in <strong>Contact Apps</strong>.
+                  The upload function itself you can check in <code>/app/containers/SampleFullstackApps/Contact/helpers/uploadImg.js</code>
+                  Here's the step to setup storage.
+                  <br /><br />
+                  <ul>
+                    <li>Go to <strong>Storage</strong> section</li>
+                    <li>Click <strong>Get Started</strong></li>
+                    <li>Got to <strong>Rules</strong> tab. To use demo Pre-build CRUD apps you need to allow all of rulles access. Later you should arrange the rules acces as you need.</li>
+                    <li>
+                      Then change the rules in editor like this
+                      <pre><code class="language-js">
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write;
+    }
+  }
+}
+</code></pre>
+                    </li>
+                    <li>Check our pre-build <strong>Contact Apps </strong><a href="http://localhost:3000/app/pages/contact-firebase" target="_blank">http://localhost:3000/app/pages/contact-firebase</a></li>
+                  </ul>
+                  <hr />
+                </div>
+            </section>
+            <!-- END -->
+            <!-- DUMP DATA -->
+            <section class="row" id="dump_data">
+                <br /><br />
+                <div class="col-lg-10">
+                  <h1>Sample Dump Data</h1>
+                  <hr />
+                  This is an example dummy data to be imported to database. In case you want to see Pre=Buil CRUD Apps with filled data.
+                  <br /><br />
+                  <ul>
+                    <li><a href="https://console.firebase.google.com/">Sign into Firebase </a> using your Google account.</li>
+                    <li>Go to <strong>Database</strong> section</li>
+                    <li>Choose <strong>Realtime Database</strong></li>
+                    <li>Go to <strong>Data</strong> tab. </li>
+                    <li>
+                      Click <strong>more</strong> icon menu on right top
+                      <img src="../images/database_more.png" alt="db" />
+                    </li>
+                    <li>
+                      Choose import JSON
+                      <img src="../images/database_import.png" alt="db" />
+                    </li>
+                    <li>Then choose <code>/dump_data/enlite-3a841-export.json</code></li>
+                    <li>Check our pre-build CRUD app i.e. <strong>To Do</strong> <a href="http://localhost:3000/app/pages/todo-firebase" target="_blank">http://localhost:3000/app/pages/todo-firebase</a></li>
+                  </ul>
+                </div>
+            </section>
+            <!-- END -->
+          </div>
+        </div>
+        <!-- END -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+  
+    <!-- Syntax Highligher -->
+    <script src="../js/prism.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.bundle.js"></script>
+
+    <!-- Jquery scrollTo -->
+    <script src="../js/jquery.nav.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $(document).ready(function() {
+        	$('#sidebar-wrapper .sidebar-nav').onePageNav();
+        });
+    </script>
+
+</body>
+
+</html>
