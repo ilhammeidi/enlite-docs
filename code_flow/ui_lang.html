@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>Enlite Prime - Firebase Documentation</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Syntax Hightlighter CSS -->
+    <link href="../css/prism.css" rel="stylesheet">
+  
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="logo">
+                        <img src="../images/logo.png" alt="logo" />
+                    </a>
+                </li>
+                <li class="sidebar-brand">
+                    <h4>UI and Languages</h4>
+                </li>
+                <li>
+                    <a href="#brand" class="cur">Brand/Project Name</a>
+                </li>
+                <li>
+                    <a href="#menu">Navigation Menu</a>
+                </li>
+                <li>
+                    <a href="#theme">Change Layout(RTL) and Theme</a>
+                </li>
+                <li>
+                    <a href="#lang">Set Language</a>
+                </li>
+            </ul>
+            <a class="back" href="../index.html"><i class="glyphicon glyphicon-arrow-left"></i> Back to Main Docs</a>
+            <span class="copy">&copy; Copyright 2019 - Enlite Prime</span>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- main content -->
+        <div id="page-content-wrapper">
+          <div class="container-fluid">
+            <!-- BRANDING -->
+            <section class="row" id="brand">
+                <br /><br />
+                <div class="col-lg-10">
+                    <h1>Brand/Project Name</h1>
+                    <hr />
+                    <ul>
+                      <li>Open <code>app/api/dummy/brand.js</code></li>
+                      <li>
+                        Here's bellow the available brand attribute
+                        <pre><code class="language-js">
+module.exports = {
+  name: 'Enlite Prime',
+  desc: 'Enlite Prime - React.js Fullstack Template',
+  prefix: 'enlite',
+  footerText: 'Enlite Prime All Rights Reserved 2019',
+  logoText: 'Enlite Prime',
+};
+</code></pre>
+                      </li>
+                      <li>
+                        Those attribute will affect in HTML &lsaquo;head&rsaquo; content and other branding name
+                      </li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END -->
+
+            <!-- NAVIGATION -->
+            <section class="row" id="menu">
+                <br /><br />
+                <div class="col-lg-10">
+                    <h1>Navigation Menu</h1>
+                    <hr />
+                    <ul>
+                      <li>Open <code>app/api/ui/menu.js</code></li>
+                      <li>
+                        Please take attention for menu attributes bellow: 
+                        <ol>
+                          <li>Key: The key value must be uniqe. The key also use for translation id in <code>app/api/ui/menuMessages.js</code></li>
+                          <li>Name: The menu text to display in navigation</li>
+                          <li>
+                            Icon: The icon is base on material icon font by use <code>&lsaquo;Icon&rsaquo;{icon}&lsaquo;/Icon&rsaquo;</code>
+                            See how to use in <a href="http://enlite.ux-maestro.com/app/ui/icons">http://enlite.ux-maestro.com/app/ui/icons</a>
+                          </li>
+                          <li>Child: Is the submenu list</li>
+                        </ol>
+                      </li>
+                      <li>
+                        Here's bellow the diagram API menu to be displayed in UI Component
+                        <iframe frameborder="0" style="width:100%;height:560px;" src="../routing_architecture.html"></iframe>
+                      </li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END -->
+            
+            <!-- THEME -->
+            <section class="row" id="theme">
+              <div class="col-lg-10">
+                <h1>Change Layout(RTL) and Theme</h1>
+                <hr />
+                  <img src="../images/guide_theme.png" width="800" alt="theme" />
+                    <br /><br />
+                    This template has <strong>6 Themes with dark/light</strong> appearance and 4 layouts mode base on navigation menu (<strong>Sidebar, Big Sidebar, Top Dropdown Menu and Mega menu).</strong>
+                    And also support for <strong>RTL</strong> direction.
+                    You can change the layout via theme panel but not permanently. To make the layout permanent just follow this step. <br /> <br />
+                    <ul>
+                      <li>Open <code>app/redux/modules/uiReducer.js</code></li>
+                      <li>
+                        Then change the <code>initialState</code> value. Here's the available api:
+                        <table class="tg">
+                          <tbody>
+                            <tr>
+                              <th class="tg-yw4l">Key</th>
+                              <th class="tg-yw4l">Type</th>
+                              <th class="tg-yw4l">Available Value</th>
+                              <th class="tg-yw4l">Example</th>
+                            </tr>
+                            <tr>
+                              <td class="tg-yw4l"><code>theme:</code></td>
+                              <td valign="top">String</td>
+                              <td>
+                                <code>'redTheme'</code>,
+                                <code>'blueTheme'</code>,  <br />
+                                <code>'greenTheme'</code>,
+                                <code>'purpleTheme'</code>,  <br />
+                                <code>'orangeTheme'</code>,
+                                <code>'greyTheme'</code>,
+                              </td>
+                              <td valign="top"><code>theme: 'greenTheme'</code></td>
+                            </tr>
+                            <tr>
+                              <td class="tg-yw4l"><code>layout:</code></td>
+                              <td valign="top">String</td>
+                              <td>
+                                <code>'left-sidebar'</code>,
+                                <code>'right-sidebar'</code>,
+                                <code>'top-navigation'</code>,
+                                <code>'mega-menu'</code>,
+                              </td>
+                              <td valign="top"><code>layout: 'left-sidebar</code></td>
+                            </tr>
+                            <tr>
+                              <td class="tg-yw4l"><code>type:</code></td>
+                              <td valign="top">String</td>
+                              <td>
+                                <code>'light'</code>,
+                                <code>'dark'</code>,
+                              </td>
+                              <td valign="top"><code>type: 'dark'</code></td>
+                            </tr>
+                            <tr>
+                              <td class="tg-yw4l"><code>direction:</code></td>
+                              <td valign="top">String</td>
+                              <td>
+                                <code>ltr</code>,
+                                <code>rtl</code>,
+                              </td>
+                              <td valign="top"><code>direction: 'rtl'</code></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <br />
+                        <strong>Here's the complete code</strong>
+                            <pre><code class="language-js">// file: app/redux/modules/uiReducer.js
+
+const initialState = {
+  /* Settings for Themes and layout */
+  theme: 'redTheme',
+  type: 'light', // light or dark
+  direction: 'ltr', // ltr or rtl
+  layout: 'big-sidebar', // sidebar, big-sidebar, top-navigation, mega-menu
+  /* End settings */
+  palette: List([
+    { name: 'Red', value: 'redTheme' },
+    { name: 'Green', value: 'greenTheme' },
+    { name: 'Blue', value: 'blueTheme' },
+    { name: 'Purple', value: 'purpleTheme' },
+    { name: 'Orange', value: 'orangeTheme' },
+    { name: 'Grey', value: 'greyTheme' },
+  ]),
+  sidebarOpen: true,
+  pageLoaded: false,
+  subMenuOpen: []
+};
+    </code></pre>
+                      </li>
+                    </ul>
+                  <br /><br />
+                  <h4>UI Redux Architecture</h4>
+                    <p>
+                      This is UI architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
+                      to show in new tab with full screen
+                  </p>
+                <iframe frameborder="0" style="width:100%;height:360px;" src="../ui_architecture.html"></iframe>
+              </div>
+            </section>
+            
+          </div>
+        </div>
+        <!-- END -->
+      
+        <!-- NAVIGATION -->
+            <section class="row" id="lang">
+                <br /><br />
+                <div class="col-lg-10">
+                    <h1>Set Language</h1>
+                    <hr />
+                    <img src="../images/lang.png" alt="lang" />
+                    <ul>
+                      <li>
+                        To set default language
+                        <ol>
+                          <li>Open <code>app/i18n.js</code></li>
+                          <li>change <code>const DEFAULT_LOCALE = 'en';</code> to other initial locale i.e. <code>id</code> for Bahasa Indonesia</li>
+                        </ol>
+                      </li>
+                      <li>
+                        Add new language
+                        <ol>
+                          <li>
+                            Define the masssages for a component. Sample messages:
+                            <pre><code class="language-js">
+/*
+ * Todo App Messages
+ *
+ * This contains all the text for the Todo App.
+ */
+import { defineMessages } from 'react-intl';
+
+export const scope = 'boilerplate.components.Todo';
+
+export default defineMessages({
+  title: {
+    id: `${scope}.title`,
+    defaultMessage: 'To Do Apps',
+  },
+  subtitle: {
+    id: `${scope}.subtitle`,
+    defaultMessage: 'All Your to do list. Just check it whenever You done.',
+  },
+  placeholder: {
+    id: `${scope}.placeholder`,
+    defaultMessage: 'What needs to be done?',
+  },
+  hint: {
+    id: `${scope}.hint`,
+    defaultMessage: 'Press enter to submit task',
+  },
+  view_all: {
+    id: `${scope}.filter.view_all`,
+    defaultMessage: 'View All',
+  },
+  active: {
+    id: `${scope}.filter.active`,
+    defaultMessage: 'Active',
+  },
+  completed: {
+    id: `${scope}.filter.completed`,
+    defaultMessage: 'Completed',
+  },
+});
+                            
+</code></pre>                            
+                          </li>
+                          <li>Create new language JSON library in <code>app/translation</code></li>
+                          <li>Then register it in <code>app/i18n.js</code></li>
+                        </ol>
+                      </li>
+                    </ul>
+                </div>
+            </section>
+            <!-- END -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+  
+    <!-- Syntax Highligher -->
+    <script src="../js/prism.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.bundle.js"></script>
+
+    <!-- Jquery scrollTo -->
+    <script src="../js/jquery.nav.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $(document).ready(function() {
+        	$('#sidebar-wrapper .sidebar-nav').onePageNav();
+        });
+    </script>
+
+</body>
+
+</html>

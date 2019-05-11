@@ -657,160 +657,49 @@ npm WARN html-to-draftjs@1.4.0 requires a peer of immutable@3.x.x || 4.x.x but n
               <!-- Layout -->
                 <section class="row" id="layout">
                     <div class="col-lg-10">
-                        <h1>Change Layout and Theme</h1>
-                        <hr />
-                        <img src="images/guide_theme.png" width="800" alt="theme" />
-                        <br /><br />
-                        This template has <strong>6 Themes with dark/light</strong> appearance and 4 layouts mode base on navigation menu (<strong>Left Sidebar, Big Left Sidebar, Top Dropdown Menu and Mega menu).</strong>
-                        You can change the layout via theme panel but not permanently. To make the layout permanent just follow this step. <br /> <br />
-                        <ul>
-                          <li>Open <code>app/redux/modules/uiReducer.js</code></li>
-                          <li>
-                            Then change the <code>initialState</code> value. Here's the available api:
-                            <table class="tg">
-                              <tbody>
-                                <tr>
-                                  <th class="tg-yw4l">Key</th>
-                                  <th class="tg-yw4l">Type</th>
-                                  <th class="tg-yw4l">Available Value</th>
-                                  <th class="tg-yw4l">Example</th>
-                                </tr>
-                                <tr>
-                                  <td class="tg-yw4l"><code>theme:</code></td>
-                                  <td valign="top">String</td>
-                                  <td>
-                                    <code>'redTheme'</code>,
-                                    <code>'blueTheme'</code>,  <br />
-                                    <code>'greenTheme'</code>,
-                                    <code>'purpleTheme'</code>,  <br />
-                                    <code>'orangeTheme'</code>,
-                                    <code>'greyTheme'</code>,
-                                  </td>
-                                  <td valign="top"><code>theme: 'greenTheme'</code></td>
-                                </tr>
-                                <tr>
-                                  <td class="tg-yw4l"><code>layout:</code></td>
-                                  <td valign="top">String</td>
-                                  <td>
-                                    <code>'left-sidebar'</code>,
-                                    <code>'right-sidebar'</code>,
-                                    <code>'top-navigation'</code>,
-                                    <code>'mega-menu'</code>,
-                                  </td>
-                                  <td valign="top"><code>layout: 'left-sidebar</code></td>
-                                </tr>
-                                <tr>
-                                  <td class="tg-yw4l"><code>type:</code></td>
-                                  <td valign="top">String</td>
-                                  <td>
-                                    <code>'light'</code>,
-                                    <code>'dark'</code>,
-                                  </td>
-                                  <td valign="top"><code>type: 'dark'</code></td>
-                                </tr>
-                                <tr>
-                                  <td class="tg-yw4l"><code>direction:</code></td>
-                                  <td valign="top">String</td>
-                                  <td>
-                                    <code>ltr</code>,
-                                    <code>rtl</code>,
-                                  </td>
-                                  <td valign="top"><code>direction: 'rtl'</code></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <br />
-                            <strong>Here's the complete code</strong>
-                                <pre><code class="language-js">// file: app/redux/modules/ui.js
-
-const initialState = {
-  /* Settings for Themes and layout */
-  theme: 'pinkGreenTheme',
-  type: 'light', // light or dark
-  gradient: true, // true or false
-  decoration: true, // true or false
-  bgPosition: 'half', // half, header, full
-  layout: 'left-sidebar', // left-sidebar, right-sidebar, top-navigation, mega-menu
-  /* End settings */
-  sidebarOpen: true,
-  pageLoaded: false,
-  palette: List([
-    { name: 'Fruit', value: 'greenOrangeTheme' },
-    { name: 'Purple', value: 'purpleRedTheme' },
-    { name: 'Ocean Sky', value: 'skyBlueTheme' },
-    { name: 'Rose Gold', value: 'magentaTheme' },
-    { name: 'Ultra Violet', value: 'purpleTheme' },
-    { name: 'Botani', value: 'pinkGreenTheme' },
-    { name: 'Ubuntu', value: 'orangeTheme' },
-    { name: 'Patriot', value: 'brownTheme' },
-    { name: 'Vintage', value: 'yellowCyanTheme' },
-    { name: 'Mint', value: 'blueCyanTheme' },
-    { name: 'Deep Ocean', value: 'blueTheme' },
-    { name: 'School', value: 'yellowBlueTheme' },
-    { name: 'Leaf', value: 'cyanTheme' },
-    { name: 'Metal Red', value: 'redTheme' },
-    { name: 'Grey', value: 'greyTheme' },
-  ]),
-  subMenuOpen: []
-};
-</code></pre>
-                          </li>
-                        </ul>
-                      <br /><br />
-                      <h4>UI Redux Architecture</h4>
-                        <p>
-                          This is UI architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
-                          to show in new tab with full screen
-                      </p>
-                        <iframe frameborder="0" style="width:100%;height:360px;" src="ui_architecture.html"></iframe>
+                      <h1>UI and Languages</h1>
+                      <hr />
+                      Follow this guide bellow to modify user interface, branding identity and default language.
+                      <div class="part-categories">
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <a href="code_flow/ui_lang.html#brand" target="_blank">
+                              <span class="icon">
+                                <i class="glyphicon glyphicon-flag"></i>
+                              </span>
+                              Brand/Project Name
+                            </a>
+                          </div>
+                          <div class="col-sm-3">
+                            <a href="code_flow/ui_lang.html#menu" target="_blank">
+                              <span class="icon">
+                                <i class="glyphicon glyphicon-list"></i>
+                              </span>
+                              Navigation Menu
+                            </a>
+                          </div>
+                          <div class="col-sm-3">
+                            <a href="code_flow/ui_lang.html#theme" target="_blank">
+                              <span class="icon">
+                                <i class="glyphicon glyphicon-tint"></i>
+                              </span>
+                              Change Layout(RTL) and Theme
+                            </a>
+                          </div>
+                          <div class="col-sm-3">
+                            <a href="code_flow/ui_lang.html#lang" target="_blank">
+                              <span class="icon">
+                                <i class="glyphicon glyphicon-font"></i>
+                              </span>
+                              Set Language
+                            </a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 </section>
                 <!-- END -->
 				
-				
-				<!-- CODE -->
-                <section class="row" id="code">
-                    <div class="col-lg-12">
-                        <h1>Enable Direct Code Preview</h1>
-                        <hr />
-                        To make documenation easy and effective to access and implement, we attached source code in every component demos.
-                        We call it Direct Code Preview. This feature can be used in purchased product only (not available in demo).
-                        <br /><br />
-                        <ul>
-                          <li>Open config file <code>app/config/codePreview.js</code></li>
-                          <li>By default it set by false <pre><code class="language-js">// file: app/config/codePreview.js
-
-export default {
-  enable: false
-};
-</code></pre></li>
-                          <li>Change to <code>enable: true</code>, to enabled direct code preview</li>
-                          <li>
-                            Test with any component demo, example in <a href="http://localhost:3000/app/tables/advanced-table" target="_blank">http://localhost:3000/app/tables/advanced-table</a>.
-                          </li>
-                          <li>
-                            Then at the bottom of every components you will see <strong>&lt;&gt; Show Code</strong> Button. Just click it.
-                          </li>
-                          <li>
-                            The source code of that components will show as well.
-                            <br /><br />
-                            <img src="images/guide_code.png" alt="theme" />
-                            <br /><br />
-                            <em>np: Basically this feature read source file directly, 
-                            so for every changes you make in component will also changes that preview.</em>
-                            <br />
-                          </li>
-                          <li>You can see through, copy and paste directly any component in front of your eyes.</li>
-                          <li>
-                            This feature use <strong>Source Reader</strong> component.
-                            You can find it in <code>src/app/components/SourceReader/SourceReader.js</code>.
-                            It was implemented in mostly component demos. 
-                          </li>
-                        </ul>
-                    </div>
-                </section>
-                <!-- END -->
-              
               <!-- CREATE PAGE -->
                 <section class="row" id="create_page">
                     <div class="col-lg-12">
@@ -893,7 +782,7 @@ class Application extends React.Component {
                           This is Routing architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
                           to show in new tab with full screen
                       </p>
-                        <iframe frameborder="0" style="width:100%;height:560px;" src="routing_architecture.html"></iframe>
+                      <iframe frameborder="0" style="width:100%;height:560px;" src="routing_architecture.html"></iframe>
                 </section>
                 <!-- END -->
               
@@ -982,6 +871,49 @@ export default SamplePage;
 </code></pre>
                                 </li>
                                 <li>Then you can check the result at <a href="http://localhost:3000/mypage/sample-page">http://localhost:3000/mypage/sample-page</a></li>
+                        </ul>
+                    </div>
+                </section>
+                <!-- END -->
+				
+				<!-- CODE -->
+                <section class="row" id="code">
+                    <div class="col-lg-12">
+                        <h1>Enable Direct Code Preview</h1>
+                        <hr />
+                        To make documenation easy and effective to access and implement, we attached source code in every component demos.
+                        We call it Direct Code Preview. This feature can be used in purchased product only (not available in demo).
+                        <br /><br />
+                        <ul>
+                          <li>Open config file <code>app/config/codePreview.js</code></li>
+                          <li>By default it set by false <pre><code class="language-js">// file: app/config/codePreview.js
+
+export default {
+  enable: false
+};
+</code></pre></li>
+                          <li>Change to <code>enable: true</code>, to enabled direct code preview</li>
+                          <li>
+                            Test with any component demo, example in <a href="http://localhost:3000/app/tables/advanced-table" target="_blank">http://localhost:3000/app/tables/advanced-table</a>.
+                          </li>
+                          <li>
+                            Then at the bottom of every components you will see <strong>&lt;&gt; Show Code</strong> Button. Just click it.
+                          </li>
+                          <li>
+                            The source code of that components will show as well.
+                            <br /><br />
+                            <img src="images/guide_code.png" alt="theme" />
+                            <br /><br />
+                            <em>np: Basically this feature read source file directly, 
+                            so for every changes you make in component will also changes that preview.</em>
+                            <br />
+                          </li>
+                          <li>You can see through, copy and paste directly any component in front of your eyes.</li>
+                          <li>
+                            This feature use <strong>Source Reader</strong> component.
+                            You can find it in <code>src/app/components/SourceReader/SourceReader.js</code>.
+                            It was implemented in mostly component demos. 
+                          </li>
                         </ul>
                     </div>
                 </section>
