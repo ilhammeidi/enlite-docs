@@ -82,9 +82,6 @@
                     <a href="#create_page">Create Page and Component</a>
                 </li>
                 <li>
-                    <a href="#crud">CRUD Apps</a>
-                </li>
-                <li>
                     <a href="#code">Direct Code Preview <span class="badge badge-danger">HOT</span></a>
                 </li>
                 <li>
@@ -497,36 +494,140 @@
                     <div class="col-lg-10">
                         <h1>Troublehooting</h1>
                         <hr />
-                        <h4>Installation Problem</h4>
-                        <ul>
-                          <li>
-                              <em>if got warning like this :</em><br />
-                              <pre><code class="language-js">npm WARN redux-immutablejs@0.0.8 requires a peer of immutable@^3.7.5 but none is installed. You must install peer dependencies yourself.
-npm WARN react-draft-wysiwyg@1.12.13 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
-npm WARN slick-carousel@1.8.1 requires a peer of jquery@>=1.8.0 but none is installed. You must install peer dependencies yourself.
-npm WARN draftjs-utils@0.9.4 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
-npm WARN html-to-draftjs@1.4.0 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
-</code></pre>
-                              <strong>Don't worry the app will run as well</strong>
-                              <p>For warning some of dependencies need another dependencies too, maybe once you install them, there’s some changes from the 3rd party vendor so probably it will make a warning to another dependencies.</p>
-                            </li>
-                            <li>
-                              <em>if got an error with a dependencies installation</em>. Try to remove the all module
-                              <code>node_modules/</code>. Then install again with <code>npm install</code>. 
-                              If error still happen, please try to remove the problematic package <code>node_modules/</code> foler. 
-                              After that try to install the problematic package manually. <code>npm install &lsaquo;package_name&rsaquo; --save-dev</code>
-                            </li>
-                            <li>
-                              if still got an error. Try to update the problematic package instead.
-                            </li>
-                        </ul>
+                        <p>Here's most common error problem when installation and first setup project</p>
+                        <div class="accordion" id="accordionExample">
+                          <div class="card">
+                            <div class="card-header" id="headingOne">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                  Installation Problem: Dependencies Warning
+                                </button>
+                              </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      <em>if got warning like this :</em><br />
+                                      <pre><code class="language-js">npm WARN redux-immutablejs@0.0.8 requires a peer of immutable@^3.7.5 but none is installed. You must install peer dependencies yourself.
+        npm WARN react-draft-wysiwyg@1.12.13 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
+        npm WARN slick-carousel@1.8.1 requires a peer of jquery@>=1.8.0 but none is installed. You must install peer dependencies yourself.
+        npm WARN draftjs-utils@0.9.4 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
+        npm WARN html-to-draftjs@1.4.0 requires a peer of immutable@3.x.x || 4.x.x but none is installed. You must install peer dependencies yourself.
+        </code></pre>
+                                      <strong>Don't worry the app will run as well</strong>
+                                      <p>For warning some of dependencies need another dependencies too, maybe once you install them, there’s some changes from the 3rd party vendor so probably it will make a warning to another dependencies.</p>
+                                    </li>
+                                    <li>
+                                      <em>if got an error with a dependencies installation</em>. Try to remove the all module
+                                      <code>node_modules/</code>. Then install again with <code>npm install</code>. 
+                                      If error still happen, please try to remove the problematic package <code>node_modules/</code> foler. 
+                                      After that try to install the problematic package manually. <code>npm install &lsaquo;package_name&rsaquo; --save-dev</code>
+                                    </li>
+                                    <li>
+                                      if still got an error. Try to update the problematic package instead.
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <div class="card-header" id="headingTwo">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  Installation Problem: Stuck on Installation
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      Here's a case error when installation being stuck on node-pre-gyp<br />
+                                      <pre><code class="language-js">node-pre-gyp WARN Using request for node-pre-gyp https download 
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      Please stop the installation process by press <strong>CTRL+C</strong>
+                                    </li>
+                                    <li>
+                                      Then run <code>npm install</code> again.
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <div class="card-header" id="headingThree">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                  Start Project Problem: Error SCSS
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      If you get error messages when start project <code>npm start</code> like this<br />
+                                      <pre><code class="language-js">ERROR in ./app/styles/layout/base.scss (./node_modules/css-loader/dist/cjs.js??ref--8-1!./node_modules/postcss-loader/src??ref--8-2!./node_modules/sass-loader/lib/loader.js??ref--8-3!./app/styles/layout/base.scss)
+Module build failed (from ./node_modules/sass-loader/lib/loader.js):
+Error: ENOENT: no such file or directory, scandir '/Users/retina/Documents/Enlite/enlite-prime_v1/starter-project/node_modules/node-sass/vendor'
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      It mean the node-sass not installed succesfully. May because connection problem, changed node environment during installation, or blocked node-sass repository
+                                    </li>
+                                    <li>
+                                      Please install <strong>node-sass</strong> manually by <code>npm install node-sass --save</code>
+                                    </li>
+                                    <li>
+                                      Build dll libraries <code>npm run build:dll</code>
+                                    </li>
+                                    <li>
+                                      Try to start project again <code>npm start</code>
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <div class="card-header" id="headingFour">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                  Development Problem: Error Firebase Auth and Database
+                                </button>
+                              </h5>
+                            </div>
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      If you get error messages when login/register or in Pre-build Apps<br />
+                                      <pre><code class="language-js">{"error":{"code":400,"message":"API key not valid. Please pass a valid API key.","errors":[{"message":"API key not valid. Please pass a valid API key.","domain":"global","reason":"badRequest"}],"status":"INVALID_ARGUMENT"}}
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      <pre><code class="language-js">{"error":{"code":400,"message":"API key not valid. Please pass a valid API key.","errors":[{"message":"API key not valid. Please pass a valid API key.","domain":"global","reason":"badRequest"}],"status":"INVALID_ARGUMENT"}}
+                                      @firebase/database: FIREBASE WARNING: Firebase error. Please ensure that you spelled the name of your Firebase correctly
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      Please check the firebase configuration in <code>app/firebase/config.js</code>. By default we use fake configuration script.
+                                    </li>
+                                    <li>
+                                      If you haven't make you're configuration please follow the <a href="code_flow/firebase.html#get_api">firebase setup instruction</a>
+                                    </li>
+                                    <li>
+                                      Then replace you're config script to <code>app/firebase/config.js</code>
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <br />
-                        <br />
-                        <h4>Development Problem</h4>
-                        <p>
-                          Every code changes, the app will updated directly without reloading the pages. 
-                          when errors happen or warning will show in browser and console browser.
-                        </p>
                         <br />
                     </div>
                 </section>
@@ -607,7 +708,7 @@ npm WARN html-to-draftjs@1.4.0 requires a peer of immutable@3.x.x || 4.x.x but n
                           This is template architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
                           to show in new tab with full screen
                       </p>
-                        <iframe frameborder="0" style="width:100%;height:580px;" src="architecture.html"></iframe>
+                        <iframe frameborder="0" style="width:100%;height:580px;" src="./diagram/architecture.html"></iframe>
                     </div>
                 </section>
                 <!-- END -->
@@ -782,7 +883,7 @@ class Application extends React.Component {
                           This is Routing architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
                           to show in new tab with full screen
                       </p>
-                      <iframe frameborder="0" style="width:100%;height:560px;" src="routing_architecture.html"></iframe>
+                      <iframe frameborder="0" style="width:100%;height:560px;" src="./diagram/routing_architecture.html"></iframe>
                 </section>
                 <!-- END -->
               

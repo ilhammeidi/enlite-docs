@@ -89,7 +89,18 @@
                         <img src="../images/firebase_project_name.png" alt="firebase project name" />
                       </li>
                       <li>Click <strong>Create Project.</strong></li>
-                      <li>You're project has been create. Next, click the Settings icon <img src="../images/setting_firebase.png" width="32" alt="Settings Icons" />, then select Project settings.</li>
+                      <li>You're project has been create.</li>
+                      <li>
+                        Open <code>/.firebaserc</code> Put you're project ID
+                        <pre><code class="language-js">
+{
+  "projects": {
+    "default": "projectID"
+  }
+}                        
+                        </code></pre>
+                      </li>
+                      <li>Next, click the Settings icon <img src="../images/setting_firebase.png" width="32" alt="Settings Icons" />, then select Project settings.</li>
                       <li>
                         In the Your apps card, click the web icon platform
                         <br />
