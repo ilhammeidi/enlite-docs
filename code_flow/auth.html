@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <title>Enlite Prime - Auth Documentation</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    
+    <!-- Syntax Hightlighter CSS -->
+    <link href="../css/prism.css" rel="stylesheet">
+  
+    <!-- Custom CSS -->
+    <link href="../css/style.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#" class="logo">
+                        <img src="../images/logo.png" alt="logo" />
+                    </a>
+                </li>
+                <li class="sidebar-brand">
+                    <h4>Authentication</h4>
+                </li>
+                <li>
+                    <a href="#diagram" class="cur">Auth Diagram</a>
+                </li>
+                <li>
+                    <a href="#register" class="cur">Register</a>
+                </li>
+                <li>
+                    <a href="#login">Login</a>
+                </li>
+                <li>
+                    <a href="#forgot">Forgot Password</a>
+                </li>
+            </ul>
+            <a class="back" href="../index.html"><i class="glyphicon glyphicon-arrow-left"></i> Back to Main Docs</a>
+            <span class="copy">&copy; Copyright 2019 - Enlite Prime</span>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- main content -->
+        <div id="page-content-wrapper">
+          <div class="container-fluid">
+           <!-- DIAGRAM -->
+           <section class="row" id="diagram">
+              <br /><br />
+              <div class="col-lg-10">
+                <h1>Authentication Diagram</h1>
+                <hr />
+                <iframe frameborder="0" style="width:100%;height:680px;" src="../diagram/auth_Structure.html"></iframe>
+              </div>
+            </section>
+            <!-- END -->
+            <!-- REGISTER -->
+            <section class="row" id="register">
+                <br /><br />
+                <div class="col-lg-10">
+                    <h1>Register</h1>
+                    <hr />
+                    <br />
+                    <h4>Constant</h4>
+                    <ul>
+                      <li>File: <code>app\redux\constants\authConstants.js</code></li>
+                      <li>
+                        Define constant:
+                        <pre>
+                          <code class="language-js">
+export const REGISTER_WITH_EMAIL_REQUEST = 'REGISTER_WITH_EMAIL_REQUEST';
+export const REGISTER_WITH_EMAIL_SUCCESS = 'REGISTER_WITH_EMAIL_SUCCESS';
+export const REGISTER_WITH_EMAIL_FAILURE = 'REGISTER_WITH_EMAIL_FAILURE';
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                    <br />
+                    <h4>Actions</h4>
+                    <ul>
+                      <li>File <code>app\redux\actions\authActions.js</code></li>
+                      <li>
+                        Put each constant in actions
+                        <pre>
+                          <code class="language-js">
+export const registerWithEmail = (name, email, password) => ({
+  type: types.REGISTER_WITH_EMAIL_REQUEST,
+  name,
+  email,
+  password
+});
+
+export const registerWithEmailSuccess = credential => ({
+  type: types.REGISTER_WITH_EMAIL_SUCCESS,
+  credential
+});
+
+export const registerWithEmailFailure = error => ({
+  type: types.REGISTER_WITH_EMAIL_FAILURE,
+  error
+});
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                    <br />
+                    <h4>Saga</h4>
+                    <ul>
+                      <li>File <code>app\redux\modules\authSagas.js</code></li>
+                      <li>
+                        Call register action in saga's function
+                        <pre>
+                          <code class="language-js">
+function* registerWithEmailSaga(payload) {
+  try {
+    yield call(firebaseAuth.createUserWithEmailAndPassword, payload.email, payload.password);
+    const dataWithName = yield call(firebaseAuth.updateProfile, {
+      displayName: payload.name,
+    });
+    yield put(registerWithEmailSuccess(dataWithName));
+    // Redirect to dashboard
+    yield history.push('/app');
+  } catch (error) {
+    yield put(registerWithEmailFailure(error));
+  }
+}
+
+function* createUserSaga({ credential }) {
+  try {
+    yield call(firebaseDb.create, 'user', {
+      email: credential.email,
+      displayName: credential.displayName,
+      creationTime: credential.metadata.creationTime,
+    });
+    yield put(createUserSuccess(credential));
+  } catch (error) {
+    yield put(createUserFailure(error));
+  }
+}
+
+function* loginRootSaga() {
+  yield fork(syncUserSaga);
+  yield all([
+    takeEvery(REGISTER_WITH_EMAIL_REQUEST, registerWithEmailSaga),
+    takeEvery(REGISTER_WITH_EMAIL_SUCCESS, createUserSaga),
+  ]);
+}
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                    <br />
+                    <h4>Reducers</h4>
+                    <ul>
+                      <li>File <code>app\redux\modules\authReducer.js</code></li>
+                      <li>
+                        Put all payload once action with constant <b>REGISTER_WITH_EMAIL_REQUEST</b> and <b>REGISTER_WITH_EMAIL_FAILURE</b>
+                        in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                        <pre>
+                          <code class="language-js">
+    case REGISTER_WITH_EMAIL_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        message: null
+      };
+    case REGISTER_WITH_EMAIL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        message: action.error.message
+      };
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                    <br />
+                    <h4>Container</h4>
+                    <ul>
+                      <li>File: app\containers\Pages\Users\Register.js </li>
+                      <li>
+                        Call the Register function in register container
+                        <pre>
+                          <code class="language-js">
+import { registerWithEmail } from 'enl-redux/actions/authActions';
+Register.propTypes = {
+  handleRegisterWithEmail: PropTypes.func.isRequired,
+};
+                          </code>
+                        </pre>
+                      </li>
+                      <li>
+                        Send register form value
+                         <pre>
+                          <code class="language-js">
+submitForm(values) {
+  setTimeout(() => {
+    this.setState({ valueForm: values });
+    console.log(`You submitted:\n\n${this.state.valueForm.get('email')}`); // eslint-disable-line
+    this.props.handleRegisterWithEmail(this.state.valueForm.get('name'), this.state.valueForm.get('email'), this.state.valueForm.get('password')); // eslint-disable-line
+  }, 500); // simulate server latency
+}
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                    <br />
+                    <h4>Component</h4>
+                    <ul>
+                      <li>File: <code>app\components\Forms\RegisterForm.js</code></li>
+                      <li>
+                        Collect register form value
+                        <pre>
+                        <code class="language-js">
+ &lt;form onSubmit={handleSubmit}&gt;
+    &lt;div&gt;
+      &lt;FormControl className={classes.formControl}&gt;
+        &lt;Field
+          name=&quot;name&quot;
+          component={TextField}
+          placeholder={intl.formatMessage(messages.loginFieldName)}
+          label={intl.formatMessage(messages.loginFieldName)}
+          required
+          className={classes.field}
+        /&gt;
+      &lt;/FormControl&gt;
+    &lt;/div&gt;
+...
+ &lt;/form&gt;                          
+                          </code>
+                        </pre>
+                      </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="row" id="login">
+                <br /><br />
+                <div class="col-lg-10">
+                  <h1>Login</h1>
+                  <hr />
+                  <br />
+                  <h4>Constants</h4>
+                  <ul>
+                    <li>File: <code>app\redux\constants\authConstants.js</code></li>
+                    <li>
+                      Define constant:
+                      <pre>
+                        <code class="language-js">
+// Use For Social Media Login                        
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+
+// Use For Email Login  
+export const LOGIN_WITH_EMAIL_REQUEST = 'LOGIN_WITH_EMAIL_REQUEST';
+export const LOGIN_WITH_EMAIL_SUCCESS = 'LOGIN_WITH_EMAIL_SUCCESS';
+export const LOGIN_WITH_EMAIL_FAILURE = 'LOGIN_WITH_EMAIL_FAILURE';
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                    <br />
+                    <h4>Actions</h4>
+                    <ul>
+                      <li>File <code>app\redux\actions\authActions.js</code></li>
+                      <li>
+                        Put each constant in actions
+                        <pre>
+                          <code class="language-js">
+// Social media login                          
+export const login = authProvider => ({
+  type: types.LOGIN_REQUEST,
+  payload: { authProvider }
+});
+
+export const loginSuccess = credential => ({
+  type: types.LOGIN_SUCCESS,
+  credential
+});
+
+export const loginFailure = error => ({
+  type: types.LOGIN_FAILURE,
+  error
+});
+
+export const signInWithGithub = () => login(
+  new firebase.auth.GithubAuthProvider()
+);
+
+export const signInWithGoogle = () => login(
+  new firebase.auth.GoogleAuthProvider()
+);
+
+export const signInWithTwitter = () => login(
+  new firebase.auth.TwitterAuthProvider()
+);
+
+// Email login  
+export const loginWithEmail = (email, password) => ({
+  type: types.LOGIN_WITH_EMAIL_REQUEST,
+  email,
+  password
+});
+
+export const loginWithEmailSuccess = credential => ({
+  type: types.LOGIN_WITH_EMAIL_SUCCESS,
+  credential
+});
+
+export const loginWithEmailFailure = error => ({
+  type: types.LOGIN_WITH_EMAIL_FAILURE,
+  error
+});
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Saga</h4>
+                  <ul>
+                    <li>File: <code>app\redux\modules\authSagas.js</code></li>
+                    <li>
+                      Call social login action in saga's function
+                      <pre>
+                        <code class="language-js">
+function* loginSaga(provider) {
+  try {
+    const data = yield call(firebaseAuth.signInWithPopup, provider.payload.authProvider);
+    yield put(loginSuccess(data));
+    if (getUrlVars().next) {
+      // Redirect to next route
+      yield history.push(getUrlVars().next);
+    } else {
+      // Redirect to dashboard if no next parameter
+      yield history.push('/app');
+    }
+  } catch (error) {
+    yield put(loginFailure(error));
+  }
+}
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Call email login action in saga's function
+                      <pre>
+                        <code class="language-js">
+function* loginWithEmailSaga(payload) {
+  try {
+    const data = yield call(firebaseAuth.signInWithEmailAndPassword, payload.email, payload.password);
+    yield put(loginWithEmailSuccess(data));
+    if (getUrlVars().next) {
+      // Redirect to next route
+      yield history.push('/app/' + getUrlVars().next);
+    } else {
+      // Redirect to dashboard if no next parameter
+      yield history.push('/app');
+    }
+  } catch (error) {
+    yield put(loginWithEmailFailure(error));
+  }
+}
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Combine them in single function
+                                            <pre>
+                        <code class="language-js">
+function* loginRootSaga() {
+  yield fork(syncUserSaga);
+  yield all([
+    takeEvery(LOGIN_REQUEST, loginSaga),
+    takeEvery(LOGIN_WITH_EMAIL_REQUEST, loginWithEmailSaga),
+  ]);
+}
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Reducer</h4>
+                  <ul>
+                    <li>File: <code>app\redux\modules\authReducer.js</code></li>
+                    <li>Put all payload once action with constant <b>LOGIN_WITH_EMAIL_REQUEST</b>, <b>LOGIN_REQUEST</b> <b>LOGIN_FAILURE</b>, <b>LOGIN_WITH_EMAIL_FAILURE</b>in reducer state. So the font-end part (React components) can get the state to modify ui or contents.</li>
+                    <li>
+                      <pre>
+                        <code class="language-js">
+case LOGIN_REQUEST:
+case LOGIN_WITH_EMAIL_REQUEST:
+  return {
+    ...state,
+    loading: true,
+    message: null
+  };
+  
+case LOGIN_FAILURE:
+case LOGIN_WITH_EMAIL_FAILURE:
+  return {
+    ...state,
+    loading: false,
+    message: action.error.message
+  };
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Containers</h4>
+                  <ul>
+                    <li>File: <code>app\containers\Pages\Users\Login.js</code></li>
+                    <li>
+                      Call the Login function in login container
+                      <pre>
+                        <code class="language-js">
+import { loginWithEmail } from 'enl-redux/actions/authActions';
+const mapDispatchToProps = dispatch => ({
+  handleLoginWithEmail: bindActionCreators(loginWithEmail, dispatch)
+});
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Send login form value
+                       <pre>
+                        <code class="language-js">
+submitForm(values) {
+  const { valueForm } = this.state;
+  setTimeout(() => {
+    this.setState({ valueForm: values });
+    console.log(`You submitted:\n\n${valueForm}`);
+    this.props.handleLoginWithEmail(this.state.valueForm.get('email'), this.state.valueForm.get('password')); // eslint-disable-line
+  }, 500); // simulate server latency
+}
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Component Email Login</h4>
+                  <ul>
+                    <li>File: <code>app\components\Forms\LoginForm.js</code></li>
+                    <li>
+                      Collect login form value
+                      <pre>
+                        <code class="language-js">
+&lt;form onSubmit={handleSubmit}&gt;
+  &lt;div&gt;
+    &lt;FormControl className={classes.formControl}&gt;
+      &lt;Field
+        name=&quot;email&quot;
+        component={TextField}
+        placeholder={intl.formatMessage(messages.loginFieldEmail)}
+        label={intl.formatMessage(messages.loginFieldEmail)}
+        required
+        validate={[required, email]}
+        className={classes.field}
+      /&gt;
+    &lt;/FormControl&gt;
+  &lt;/div&gt;
+  ...
+&lt;/form&gt;  
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Component Social Login</h4>
+                  <ul>
+                    <li>File: <code>app\components\Forms\LoginForm.js</code></li>
+                    <li>
+                      Import social login function
+                      <pre>
+                        <code class="language-js">
+import {
+  signInWithGithub,
+  signInWithGoogle,
+  signInWithTwitter,
+} from 'enl-redux/actions/authActions';
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Dispatch social login function
+                      <pre>
+                        <code class="language-js">
+const mapDispatchToProps = {
+  signInWithGithubFn: signInWithGithub,
+  signInWithGoogleFn: signInWithGoogle,
+  signInWithTwitterFn: signInWithTwitter,
+};
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Call the function when button <strong>onClick</strong>
+                      <pre>
+                        <code class="language-js">
+&lt;section className={classes.socmedSideLogin}&gt;
+  &lt;Button
+    variant=&quot;contained&quot;
+    className={classes.redBtn}
+    type=&quot;button&quot;
+    size=&quot;large&quot;
+    onClick={signInWithGoogleFn}
+  &gt;
+    &lt;Ionicon icon=&quot;logo-google&quot; /&gt;
+    Google
+  &lt;/Button&gt;
+  &lt;Button
+    variant=&quot;contained&quot;
+    className={classes.cyanBtn}
+    type=&quot;button&quot;
+    size=&quot;large&quot;
+    onClick={signInWithTwitterFn}
+  &gt;
+    &lt;Ionicon icon=&quot;logo-twitter&quot; /&gt;
+    Twitter
+  &lt;/Button&gt;
+  &lt;Button
+    variant=&quot;contained&quot;
+    className={classes.greyBtn}
+    type=&quot;button&quot;
+    size=&quot;large&quot;
+    onClick={signInWithGithubFn}
+  &gt;
+    &lt;Ionicon icon=&quot;logo-github&quot; /&gt;
+    Github
+  &lt;/Button&gt;
+&lt;/section&gt;
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                </div>
+            </section>
+          </div>
+        </div>
+        <!-- main content -->
+        <div id="page-content-wrapper">
+          <div class="container-fluid">
+            <!-- BRANDING -->
+            <section class="row" id="forgot">
+                <br /><br />
+                <div class="col-lg-10">
+                  <h1>Forgot Password</h1>
+                  <hr />
+                  <br />
+                  <h4>Constant</h4>
+                  <ul>
+                    <li>File: <code>app\redux\constants\authConstants.js</code></li>
+                    <li>
+                      Define constant:
+                      <pre>
+                        <code class="language-js">
+export const PASSWORD_FORGET_REQUEST = 'PASSWORD_FORGET_REQUEST';
+export const PASSWORD_FORGET_SUCCESS = 'PASSWORD_FORGET_SUCCESS';
+export const PASSWORD_FORGET_FAILURE = 'PASSWORD_FORGET_FAILURE';
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Actions</h4>
+                  <ul>
+                    <li>File: <code>app\redux\actions\authActions.js</code></li>
+                    <li>
+                      Put each constant in actions
+                      <pre>
+                        <code class="language-js">
+export const passwordForget = (email) => ({
+  type: types.PASSWORD_FORGET_REQUEST,
+  email
+});
+
+export const passwordForgetSuccess = credential => ({ // eslint-disable-line
+  type: types.PASSWORD_FORGET_SUCCESS
+});
+
+export const passwordForgetFailure = error => ({
+  type: types.PASSWORD_FORGET_FAILURE,
+  error
+});
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Saga</h4>
+                  <ul>
+                    <li>File: <code>app\redux\modules\authSagas.js</code></li>
+                    <li>
+                      Call social forgot password action in saga's function
+                      <pre>
+                        <code class="language-js">
+function* passwordForgetSaga({ email }) {
+  try {
+    yield call(firebaseAuth.sendPasswordResetEmail, email);
+    yield put(passwordForgetSuccess());
+  } catch (error) {
+    yield put(passwordForgetFailure(error));
+  }
+}
+
+function* loginRootSaga() {
+  yield all([
+    takeEvery(PASSWORD_FORGET_REQUEST, passwordForgetSaga)
+  ]);
+}
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Reducer</h4>
+                  <ul>
+                    <li>File: <code>app\redux\modules\authReducer.js</code></li>
+                    <li>
+                      Put all payload once action with constant <strong>PASSWORD_FORGET_FAILURE:</strong>, <strong>PASSWORD_FORGET_SUCCESS</strong> reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                      <pre>
+                        <code class="language-js">
+case PASSWORD_FORGET_FAILURE:
+  return {
+    ...state,
+    loading: false,
+    message: action.error.message
+  };
+
+case PASSWORD_FORGET_SUCCESS:
+  return {
+    ...state,
+    message: 'LINK.PASSWORD_RESET.SENT'
+  };
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Containers</h4>
+                  <ul>
+                    <li>File: <code>app\containers\Pages\Users\ResetPassword.js</code></li>
+                    <li>
+                      Call the <strong>Reset function, then dispatch it.</strong>
+                      <pre>
+                        <code class="language-js">
+import { passwordForget } from 'enl-redux/actions/authActions';
+const mapDispatchToProps = dispatch => ({
+  handleForgotPwd: bindActionCreators(passwordForget, dispatch)
+});
+                        </code>
+                      </pre>
+                    </li>
+                    <li>
+                      Send email value
+                      <pre>
+                        <code class="language-js">
+submitForm(values) {
+  setTimeout(() => {
+    this.setState({ valueForm: values });
+    console.log(`You submitted:\n\n${this.state.valueForm}`); // eslint-disable-line
+    this.props.handleForgotPwd(this.state.valueForm.get('email')); // eslint-disable-line
+  }, 500); // simulate server latency
+}                        
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+                  <br />
+                  <h4>Component</h4>
+                  <ul>
+                    <li>File: <code>app\components\Forms\ResetForm.js</code></li>
+                    <li>
+                      Get email value
+                      <pre>
+                        <code class="language-js">
+&lt;form onSubmit={handleSubmit}&gt;
+  &lt;div&gt;
+    &lt;FormControl className={classes.formControl}&gt;
+      &lt;Field
+        name=&quot;email&quot;
+        component={TextField}
+        placeholder={intl.formatMessage(messages.loginFieldEmail)}
+        label={intl.formatMessage(messages.loginFieldEmail)}
+        required
+        validate={[required, email]}
+        className={classes.field}
+      /&gt;
+    &lt;/FormControl&gt;
+  &lt;/div&gt;
+  &lt;div className={classes.btnArea}&gt;
+    &lt;Button variant=&quot;contained&quot; color=&quot;primary&quot; type=&quot;submit&quot;&gt;
+      &lt;FormattedMessage {...messages.resetButton} /&gt;
+      &lt;ArrowForward className={classNames(classes.rightIcon, classes.iconSmall, classes.signArrow)} disabled={submitting || pristine} /&gt;
+    &lt;/Button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;              
+                        </code>
+                      </pre>
+                    </li>
+                  </ul>
+              </div>
+            </section>
+          </div>
+      </div>
+      <br /><br />
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
+  
+    <!-- Syntax Highligher -->
+    <script src="../js/prism.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.bundle.js"></script>
+
+    <!-- Jquery scrollTo -->
+    <script src="../js/jquery.nav.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+        $(document).ready(function() {
+        	$('#sidebar-wrapper .sidebar-nav').onePageNav();
+        });
+    </script>
+
+</body>
+
+</html>

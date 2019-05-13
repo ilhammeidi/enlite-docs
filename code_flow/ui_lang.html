@@ -250,6 +250,8 @@ const initialState = {
                           <li>
                             Define the masssages for a component. Sample messages:
                             <pre><code class="language-js">
+// messages.js
+
 /*
  * Todo App Messages
  *
@@ -292,13 +294,71 @@ export default defineMessages({
                             
 </code></pre>                            
                           </li>
+                          <li><strong>Save</strong> file with name i.e <code>messages.js</code></li>
                           <li>Create new language JSON library in <code>app/translation</code></li>
                           <li>Then register it in <code>app/i18n.js</code></li>
+                          <li>
+                            Put the messages to the React Components
+                            <ol>
+                              <li>Pick one of sample <strong>Components</strong> with cointaining text</li>
+                              <li>Import file message <br />
+                                 <pre><code class="language-js">
+import messages from './messages';                                 
+                                 </code></pre>
+                              </li>
+                              <li>
+                                Import <code>react-intl</code>
+                                <pre>
+                                  <code class="language-js">
+import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+                                  </code>
+                                </pre>
+                              </li>
+                              <li>Basically the message value is <strong>String</strong>. And next step is replace/add every string in components</li>
+                              <li>
+                                Register <code>intl</code> to props
+                                <pre>
+                                  <code class="language-js">
+intl: intlShape.isRequired
+                                  </code>
+                                </pre>
+                              </li>
+                              <li>
+                                Add messages inside components <br />
+                                <pre>
+                                  <code class="language-js">
+&lt;YourComponent&gt;
+   &lt;FormattedMessage {...messages[item.key]} /&gt;
+ &lt;/YourComponent&gt;
+                                  </code>
+                                </pre>
+                              </li>
+                              <li>
+                                Add messages as component attribute/prop <br />
+                                <pre>
+                                  <code class="language-js">
+&lt;YourComponent text={intl.formatMessage(messages[item.key])} /&gt;
+                                  </code>
+                                </pre>
+                              </li>
+                              <li>
+                                The last step, wrap the component with <code>injectIntl</code>
+                              </li>
+                              <li>
+                              <pre>
+                                  <code class="language-js">
+export default injectIntl(Sidebar);
+                                  </code>
+                                </pre>
+                              </li>
+                            </ol>
+                          </li>
                         </ol>
                       </li>
                     </ul>
                 </div>
             </section>
+      <br /><br />
             <!-- END -->
 
     </div>
