@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, shrink-to-fit=no, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+  <title>Enlite Prime - Email Documentation</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+  <!-- Bootstrap Core CSS -->
+  <link href="../css/bootstrap.css" rel="stylesheet">
+
+  <!-- Syntax Hightlighter CSS -->
+  <link href="../css/prism.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="../css/style.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+  <div id="wrapper" class="toggled">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+          <a href="#" class="logo">
+                        <img src="../images/logo.png" alt="logo" />
+                    </a>
+        </li>
+        <li class="sidebar-brand">
+          <h4>Email</h4>
+        </li>
+        <li>
+          <a href="#diagram" class="cur">Email Diagram</a>
+        </li>
+        <li>
+          <a href="#read" class="cur">Read/Fetch</a>
+        </li>
+        <li>
+          <a href="#create">Create (Send)</a>
+        </li>
+        <li>
+          <a href="#update">Update</a>
+        </li>
+        <li>
+          <a href="#delete">Delete</a>
+        </li>
+      </ul>
+      <a class="back" href="../index.html"><i class="glyphicon glyphicon-arrow-left"></i> Back to Main Docs</a>
+      <span class="copy">&copy; Copyright 2019 - Enlite Prime</span>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- main content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <!-- DIAGRAM -->
+        <section class="row" id="diagram">
+          <br /><br />
+          <div class="col-lg-10">
+            <h1>Email Diagram</h1>
+            <hr />
+            <iframe frameborder="0" style="width:100%;height:680px;" src="../diagram/email_structure.html"></iframe>
+          </div>
+        </section>
+        <!-- END -->
+        <section class="row" id="read">
+          <br /><br />
+          <div class="col-lg-10">
+            <h1>Read / Fetch</h1>
+            <hr />
+            <br />
+            <h4>Constant</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailConstants.js</code></li>
+              <li>
+                Define constant:
+                <pre>
+                  <code class="language-js">
+export const FETCH_EMAIL = 'FETCH_EMAIL';
+export const FETCH_EMAIL_SUCCESS = 'FETCH_EMAIL_SUCCESS';
+export const FETCH_EMAIL_FAILED = 'FETCH_EMAIL_FAILED';
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Actions</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailActions.js</code></li>
+              <li>
+                Put each constant in actions
+                <pre>
+                  <code class="language-js">
+/* Load */
+export const loadMailSuccess = payload => ({
+  type: types.FETCH_EMAIL_SUCCESS,
+  payload,
+});
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Saga</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailSagas.js</code></li>
+              <li>
+                Call load task action in saga's function
+                <pre>
+                  <code class="language-js">
+function* read() {
+  const channel = yield call(subscribe);
+  while (true) {
+    const action = yield take(channel);
+    yield put(action);
+  }
+}
+
+function* watchEmail() {
+  while (true) {
+    emailList.path = 'emails/';
+    const job = yield fork(read);
+
+    yield take([FETCH_EMAIL]);
+    yield cancel(job);
+  }
+}
+                  </code>
+                </pre>
+              </li>
+              <li>
+                Subscribe from <strong>models</strong>
+                <pre>
+                  <code class="language-js">
+import EmailModels from '../models';
+import Init from '../models/init';
+
+import { loadMailSuccess } from './emailActions';
+
+const emailList = new EmailModels({
+  onLoad: loadMailSuccess,
+}, Init);
+
+function subscribe() {
+  return eventChannel(emit => emailList.subscribe(emit));
+}
+
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Reducer</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailReducer.js</code></li>
+              <li>
+                Put all payload action with constant <strong>FETCH_EMAIL_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                <pre>
+                  <code class="language-js">
+case FETCH_EMAIL_SUCCESS:
+  return state.withMutations((mutableState) => {
+    const items = fromJS(action.payload);
+    mutableState
+      .set('inbox', new List(items))
+      .set('loading', false);
+  });
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Container</h4>
+            <ul>
+              <li>File: <code>\app\containers\SampleFullstackApps\Email\index.js</code></li>
+              <li>
+                Load state data to container as prop
+                <pre>
+                  <code class="language-js">
+import { getVisibleMail } from './reducers/selectors';                  
+const { emailData } = this.props;
+
+const mapStateToProps = state => ({
+  emailData: getVisibleMail(state.get(reducer)),
+});
+
+return {
+  &lt;EmailList
+    emailData={emailData}
+    openMail={openMail}
+    filterPage={currentPage}
+    keyword={keyword}
+    moveTo={update}
+    remove={remove}
+    toggleStar={update}
+    reply={this.handleReply}
+    loading={loading}
+  /&gt;
+}
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Components</h4>
+            <ul>
+              <li>File: <code>app\components\Email\EmailList.js</code></li>
+              <li>
+                Populate <strong>emailData</strong> prop as dataArray to component
+                <pre>
+                  <code class="language-js">
+const getItem = dataArray => dataArray.map(data => {
+  const renderHTML = { __html: mail.get('content') };
+  if (mail.get('subject').toLowerCase().indexOf(keyword) === -1) {
+    return false;
+  }
+  return (
+    &lt;ExpansionPanel className={classes.emailList} key={mail.get('key')} onChange={() =&gt; openMail(mail)}&gt;
+      &lt;ExpansionPanelSummary className={classes.emailSummary} expandIcon={&lt;ExpandMoreIcon /&gt;}&gt;
+        &lt;div className={classes.fromHeading}&gt;
+          &lt;Tooltip id="tooltip-mark" title={intl.formatMessage(messages.stared)}&gt;
+            &lt;IconButton onClick={() =&gt; this.handleStared(mail)} className={classes.starBtn}&gt;{mail.get('stared') ? (&lt;Star className={classes.iconOrange} /&gt;) : (&lt;StarBorder /&gt;) }&lt;/IconButton&gt;
+          &lt;/Tooltip&gt;
+          {mail.get('category') !== 'spam'
+            ? (&lt;Avatar alt="avatar" src={mail.get('avatar')} className={classes.avatar} /&gt;)
+            : (&lt;Avatar alt="avatar" className={classes.avatar}&gt;&lt;ReportIcon /&gt;&lt;/Avatar&gt;)
+          }
+          &lt;Typography className={classes.heading}&gt;
+            {mail.get('category') === 'sent' && ('To ')}
+            {mail.get('name')}
+            &lt;Typography variant="caption"&gt;{mail.get('date')}&lt;/Typography&gt;
+          &lt;/Typography&gt;
+        &lt;/div&gt;
+        &lt;div className={classes.column}&gt;
+          &lt;Typography className={classes.secondaryHeading} noWrap&gt;{mail.get('subject')}&lt;/Typography&gt;
+          {getCategory(mail.get('category'))}
+        &lt;/div&gt;
+      &lt;/ExpansionPanelSummary&gt;
+      &lt;ExpansionPanelDetails className={classes.details}&gt;
+        &lt;section&gt;
+          &lt;div className={classes.topAction}&gt;
+            &lt;Typography className={classes.headMail}&gt;
+              {mail.get('category') !== 'sent' && (
+                &lt;Fragment&gt;
+                  &lt;FormattedMessage {...messages.from} /&gt;
+                  &nbsp;
+                  {mail.get('name')}
+                  &nbsp;to me
+                &lt;/Fragment&gt;
+              )}
+            &lt;/Typography&gt;
+            &lt;div className={classes.opt}&gt;
+              &lt;Tooltip id="tooltip-mark" title={intl.formatMessage(messages.stared)}&gt;
+                &lt;IconButton onClick={() =&gt; this.handleStared(mail)}&gt;{mail.get('stared') ? (&lt;Star className={classes.iconOrange} /&gt;) : (&lt;StarBorder /&gt;) }&lt;/IconButton&gt;
+              &lt;/Tooltip&gt;
+              &lt;Tooltip id="tooltip-mark" title={intl.formatMessage(messages.mark_to)}&gt;
+                &lt;IconButton
+                  className={classes.button}
+                  aria-label="mark"
+                  aria-owns={anchorElOpt ? 'long-menu' : null}
+                  aria-haspopup="true"
+                  onClick={(event) =&gt; this.handleClickOpt(event, mail)}
+                &gt;
+                  &lt;Bookmark /&gt;
+                &lt;/IconButton&gt;
+              &lt;/Tooltip&gt;
+              &lt;Tooltip id="tooltip-mark" title={intl.formatMessage(messages.remove)}&gt;
+                &lt;IconButton className={classes.button} aria-label="Delete" onClick={() =&gt; remove(mail)}&gt;&lt;Delete /&gt;&lt;/IconButton&gt;
+              &lt;/Tooltip&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div className={classes.emailContent}&gt;
+            &lt;Typography variant="h6" gutterBottom&gt;{mail.get('subject')}&lt;/Typography&gt;
+            &lt;article dangerouslySetInnerHTML={renderHTML} /&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/ExpansionPanelDetails&gt;
+      &lt;Divider /&gt;
+      &lt;ExpansionPanelActions&gt;
+        &lt;div className={classes.action}&gt;
+          &lt;Button size="small"&gt;
+            &lt;FormattedMessage {...messages.forward} /&gt;
+          &lt;/Button&gt;
+          &lt;Button size="small" color="secondary" onClick={() =&gt; reply(mail)}&gt;
+            &lt;FormattedMessage {...messages.reply} /&gt;
+          &lt;/Button&gt;
+        &lt;/div&gt;
+      &lt;/ExpansionPanelActions&gt;
+    &lt;/ExpansionPanel&gt;
+  );
+});
+                  </code>
+                </pre>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="row" id="create">
+          <br /><br />
+          <div class="col-lg-10">
+            <h1>Create (Send)</h1>
+            <hr />
+            <br />
+            <h4>Constant</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailConstants.js</code></li>
+              <li>
+                Define constant
+                <pre>
+                  <code class="language-js">
+export const SEND_MAIL = 'SEND_MAIL';
+export const SEND_MAIL_SUCCESS = 'SEND_MAIL_SUCCESS';
+export const SEND_MAIL_FAILED = 'SEND_MAIL_FAILED';                 
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Actions</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailActions.js</code></li>
+              <li>
+                Put each constant in actions
+                <pre>
+                  <code class="language-js">
+export const sendAction = payload => ({
+  type: types.SEND_MAIL,
+  payload,
+});
+
+export const sendActionSuccess = payload => ({
+  type: types.SEND_MAIL_SUCCESS,
+  payload,
+});
+
+export const sendActionFailed = error => ({
+  type: types.SEND_MAIL_FAILED,
+  payload: { error },
+});            
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Saga</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailSagas.js</code></li>
+              <li>
+                Define send models
+                <pre>
+                  <code class="language-js">
+const sendMail = write.bind(null, emailList, emailList.push, sendActionFailed);
+                  </code>
+                </pre>
+              </li>
+              <li>
+                Call send email action in saga's function
+                <pre>
+                  <code class="language-js">
+function* watchSendEmail() {
+  while (true) {
+    const { payload } = yield take(SEND_MAIL);
+    yield fork(sendMail, payload);
+  }
+}         
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Reducer</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailReducer.js</code></li>
+              <li>
+                Put all payload action with constant <strong>SEND_MAIL_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                <pre>
+                  <code class="language-js">
+case SEND_MAIL_SUCCESS:
+  return state.withMutations((mutableState) => {
+    const items = action.payload;
+    mutableState.set('inbox', state.get('inbox').unshift(items));
+    mutableState
+      .set('selectedMailId', '')
+      .set('openFrm', false)
+      .set('notifMsg', notif.sent)
+      .set('processing', false);
+  });    
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Container</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\index.js</code></li>
+              <li>
+                Dispatch send action in container
+                <pre>
+                  <code class="language-js">
+import { sendAction } from './reducers/emailActions';    
+
+const constDispatchToProps = dispatch => ({
+  sendEmail: bindActionCreators(sendAction, dispatch),
+});
+
+return (
+  &lt;ComposeEmail
+    to={to}
+    subject={subject}
+    compose={this.handleCompose}
+    validMail={validMail}
+    sendEmail={sendEmail}
+    inputChange={this.handleChange}
+    open={openFrm}
+    closeForm={discard}
+    processing={processing}
+  /&gt;
+)
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Component</h4>
+            <ul>
+              <li>File: <code>app\components\Email\ComposeEmail.js</code></li>
+              <li>
+                Send email values by onClick send button
+                <pre>
+                  <code class="language-js">
+handleSend = message => {
+  const { sendEmail } = this.props;
+  sendEmail(message);
+  this.setState({ emailContent: '', files: [] });
+};
+
+return (
+  &lt;Button
+    variant="contained"
+    color="secondary"
+    type="button"
+    disabled={!to || !subject || processing}
+    onClick={() =&gt; this.handleSend(newData)}
+  &gt;
+    {processing && &lt;CircularProgress size={24} className={classes.buttonProgress} /&gt;}
+    &lt;FormattedMessage {...messages.send} /&gt;
+    &nbsp;
+    &lt;Send className={classes.sendIcon} /&gt;
+  &lt;/Button&gt;
+)
+                  </code>
+                </pre>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="row" id="update">
+          <br /><br />
+          <div class="col-lg-10">
+            <h1>Update</h1>
+            <hr />
+            <h4>Constant</h4>
+            <br />
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailConstants.js</code></li>
+              <li>
+                Define constant
+                <pre>
+                  <code class="language-js">
+export const UPDATE_MAIL = 'UPDATE_MAIL';
+export const UPDATE_MAIL_SUCCESS = 'UPDATE_MAIL_SUCCESS';
+export const UPDATE_MAIL_FAILED = 'UPDATE_MAIL_FAILED';
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailActions.js</code></li>
+              <li>
+                Put each constant in actions
+                <pre>
+                  <code class="language-js">
+export const updateAction = (mail, changes) => ({
+  type: types.UPDATE_MAIL,
+  payload: { mail, changes },
+});
+
+export const updateActionSuccess = payload => ({
+  type: types.UPDATE_MAIL_SUCCESS,
+  payload,
+});
+
+export const updateActionFailed = error => ({
+  type: types.UPDATE_MAIL_SUCCESS,
+  payload: { error },
+});
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Saga</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailSagas.js</code></li>
+              <li>
+                Define <strong>update models</strong>
+                <pre>
+                  <code class="language-js">
+const updateMail = write.bind(null, emailList, emailList.update, updateActionFailed);
+                  </code>
+                </pre>
+              </li>
+              <li>
+                Call update email action in saga's function
+                <pre>
+                  <code class="language-js">
+function* watchUpdateEmail() {
+  while (true) {
+    const { payload } = yield take(UPDATE_MAIL);
+    yield fork(updateMail, payload.mail.key, payload.changes);
+  }
+}
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Reducer</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailReducer.js</code></li>
+              <li>
+                Put all payload action with constant <strong>UPDATE_MAIL_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                <pre>
+                  <code class="language-js">
+case UPDATE_MAIL_SUCCESS:
+  return state.withMutations((mutableState) => {
+    mutableState
+      .set(
+        'inbox',
+        state.get('inbox').map(mail => (mail.key === action.payload.key ? action.payload : mail))
+      )
+      .set('notifMsg', notif.updated);
+  });
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Container</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\index.js</code></li>
+              <li>
+                Dispatch update action in container.
+                <pre>
+                  <code class="language-js">
+import { updateAction } from './reducers/emailActions';
+
+const constDispatchToProps = dispatch => ({
+  update: bindActionCreators(updateAction, dispatch),
+});
+  
+return (
+  &lt;EmailList
+    emailData={emailData}
+    openMail={openMail}
+    filterPage={currentPage}
+    keyword={keyword}
+    moveTo={update}
+    remove={remove}
+    toggleStar={update}
+    reply={this.handleReply}
+    loading={loading}
+  /&gt;
+)
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Component</h4>
+            <ul>
+              <li>File: <code>app\components\Email\EmailList.js</code></li>
+              <li>
+                Push updated <strong>Email attribute</strong>
+                <pre>
+                  <code class="language-js">
+handleMoveTo = (item, category) => {
+    const { moveTo } = this.props;
+    moveTo(item, { category });
+    this.setState({ anchorElOpt: null });
+  }
+
+handleStared = mail => {
+  const { toggleStar } = this.props;
+  toggleStar(mail, { stared: !mail.get('stared') });
+}
+
+return (
+  &lt;IconButton onClick={() =&gt; this.handleStared(mail)} className={classes.starBtn}&gt;{mail.get('stared') ? (&lt;Star className={classes.iconOrange} /&gt;) : (&lt;StarBorder /&gt;) }&lt;/IconButton&gt;
+  
+  &lt;MenuItem selected onClick={() =&gt; this.handleMoveTo(itemToMove, 'updates')}&gt;
+    &lt;Flag className={classes.iconOrange} /&gt;
+    &nbsp;
+    &lt;FormattedMessage {...messages.updates} /&gt;
+  &lt;/MenuItem&gt;
+)
+                  </code>
+                </pre>
+              </li>
+            </ul>
+          </div>
+        </section>
+        <section class="row" id="delete">
+          <br /><br />
+          <div class="col-lg-10">
+            <h1>Delete</h1>
+            <hr />
+            <h4>Constant</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailConstants.js</code></li>
+              <li>
+                Define constant
+                <pre>
+                  <code class="language-js">
+export const DELETE_MAIL = 'DELETE_MAIL';
+export const DELETE_MAIL_SUCCESS = 'DELETE_MAIL_SUCCESS';
+export const DELETE_MAIL_FAILED = 'DELETE_MAIL_FAILED';
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Actions</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailActions.js</code></li>
+              <li>
+                Put each constant in actions
+                <pre>
+                  <code class="language-js">
+/* Delete */
+export const deleteAction = payload => ({
+  type: types.DELETE_MAIL,
+  payload,
+});
+
+export const deleteActionSuccess = payload => ({
+  type: types.DELETE_MAIL_SUCCESS,
+  payload,
+});
+
+export const deleteActionFailed = error => ({
+  type: types.DELETE_MAIL_FAILED,
+  payload: { error },
+});
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Saga</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailSagas.js</code></li>
+              <li>
+                Define <strong>remove models</strong>
+                <pre>
+                  <code class="language-js">
+const removeMail = write.bind(null, emailList, emailList.remove, deleteActionFailed);
+                  </code>
+                </pre>
+              </li>
+              <li>
+                Call remove email action in saga's function
+                <pre>
+                  <code class="language-js">
+function* watchRemoveEmail() {
+  while (true) {
+    const { payload } = yield take(DELETE_MAIL);
+    yield fork(removeMail, payload.key);
+  }
+}
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Reducer</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\reducers\emailReducer.js</code></li>
+              <li>
+                Put all payload action with constant <strong>DELETE_MAIL_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                <pre>
+                  <code class="language-js">
+case DELETE_MAIL_SUCCESS:
+  return state.withMutations((mutableState) => {
+    mutableState
+      .set('inbox',
+        state.get('inbox').filter(mail => mail.key !== action.payload.key)
+      )
+      .set('notifMsg', notif.removed);
+  });
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Container</h4>
+            <ul>
+              <li>File: <code>app\containers\SampleFullstackApps\Email\index.js</code></li>
+              <li>
+                Dispatch remove action in container
+                <pre>
+                  <code class="language-js">
+import { deleteAction } from './reducers/emailActions';
+
+const constDispatchToProps = dispatch => ({
+  remove: bindActionCreators(deleteAction, dispatch),
+});
+
+return (
+  &lt;EmailList
+    emailData={emailData}
+    openMail={openMail}
+    filterPage={currentPage}
+    keyword={keyword}
+    moveTo={update}
+    remove={remove}
+    toggleStar={update}
+    reply={this.handleReply}
+    loading={loading}
+  /&gt;
+)
+
+                  </code>
+                </pre>
+              </li>
+            </ul>
+            <br />
+            <h4>Component</h4>
+            <ul>
+              <li>File: <code>app/components/Email/EmailList.js</code></li>
+              <li>
+                Call remove function by onClick remove button
+                <pre>
+                  <code class="language-js">
+return (
+  &lt;IconButton className={classes.button} aria-label="Delete" onClick={() =&gt; remove(mail)}&gt;&lt;Delete /&gt;&lt;/IconButton&gt;
+)
+
+                  </code>
+                </pre>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+    <br /><br />
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- jQuery -->
+  <script src="../js/jquery.js"></script>
+
+  <!-- Syntax Highligher -->
+  <script src="../js/prism.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="../js/bootstrap.bundle.js"></script>
+
+  <!-- Jquery scrollTo -->
+  <script src="../js/jquery.nav.js"></script>
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $(document).ready(function() {
+      $('#sidebar-wrapper .sidebar-nav').onePageNav();
+    });
+
+  </script>
+
+</body>
+
+</html>
