@@ -121,14 +121,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.2.0</h4>
+                        <h4>Version 1.2.5</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 20 Jul 2019
+                                Latest Update : 28 Aug 2019
                             </li>
                         </ul>
                     </div>
@@ -865,14 +865,14 @@ class Application extends React.Component {
     return (
       &lt;Dashboard history={this.props.history} changeMode={changeMode}&gt;
         &lt;Switch&gt;
-          &lt;Route exact path="/sample-page" component={SamplePage} /&gt;
+          &lt;Route exact path="/app/sample-page" component={SamplePage} /&gt;
         &lt;/Switch&gt;
       &lt;/Dashboard&gt;
     )
   }
 }</code></pre>
                               </li>
-                              <li>Then you can access it at <a href="http://localhost:3000/mypage/sample-page">http://localhost:3000/mypage/sample-page</a></li>
+                              <li>Then you can access it at <a href="http://localhost:3000/app/sample-page">http://localhost:3000/app/sample-page</a></li>
                               <li>Also you can put the a usual link inside &lt;a /&gt; or material button. <a href="http://localhost:3000/app/forms/buttons" target="_blank">See this documentation</a></li>
                             </ul>
                         <br />
@@ -1490,6 +1490,37 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.2.5 – 28 Aug, 2019</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                  <td>
+                                      Feature: Add tree view and tree table redux
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                      Feature: Add pure Front-End page for Auth pages (Login, Register, Reset Password)
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                      UI Changed: Use Maven Pro as primary font-family replace Lato
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                      Fixed: Avatar space margin in List
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
