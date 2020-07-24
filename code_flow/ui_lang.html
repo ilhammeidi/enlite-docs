@@ -183,7 +183,15 @@ module.exports = {
                               <td valign="top">String</td>
                               <td>
                                 <code>ltr</code>,
-                                <code>rtl</code>,
+                                <code>rtl</code><br />
+                                For RTL as default layout, please set up the HTML attribute as well.
+                                In <code>/app/index.html</code> please add <code>dir="rtl</code><br />
+                                <pre>
+                                <code class="language-js">                                  
+&lt;html lang="ar" dir="rtl"&gt;                        
+                                  </code>
+                                </pre>
+                                For lang attribute please follow the language you use     
                               </td>
                               <td valign="top"><code>direction: 'rtl'</code></td>
                             </tr>
