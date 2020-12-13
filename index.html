@@ -121,14 +121,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.4.2</h4>
+                        <h4>Version 1.4.3</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 15 Nov 2020
+                                Latest Update : 13 Dec 2020
                             </li>
                         </ul>
                     </div>
@@ -436,8 +436,11 @@
                         <hr />
                         <h4>Production</h4>
 						<ul>
+              <li>First you have to clone/copy the all project code in your hosting/cloud server.</li>
+              <li>Open your console to access the hosting/cloud server.</li>
+              <li>If you haven't install the dependencies before, please run npm install</li>
 							<li>
-                                First you need to build the production assets first
+                                After that you need to build the production assets first
 								<pre><code class="language-js">npm run build</code></pre>
 								It usually take longer time than development to generate and compress production code.
 								The generated files will be placed in <code>build/</code>
@@ -1490,6 +1493,79 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.4.3 – 13 Dec, 2020</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Fixed: Big Sidebar transition issue
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes <br />
+                                    - app/components/SidebarBig/MainMenuBig.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Fixed: node-sass installation issue for node version 14
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes <br />
+                                    - package.json <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Chore: Implement hooks lifecycle for Tables
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes <br />
+                                    - app/components/Tables/*.js <br />
+                                    - app/containers/Tables/*.js <br />
+                                    - app/containers/Tables/demos/*.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Chore: Implement hooks lifecycle for Pages
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes <br />
+                                    - app/components/SocialMedia/*.js <br />
+                                    - app/containers/Pages/Timeline/index.js <br />
+                                    - app/containers/Pages/Timeline/reducers/timelineReducer.js <br />
+                                    - app/components/Chat/*.js <br />
+                                    - app/containers/Pages/Chat/index.js <br />
+                                    - app/components/Profile/*.js <br />
+                                    - app/containers/Pages/UserProfile/index.js <br />
+                                    - app/components/Product/*.js <br />
+                                    - app/components/Invoice/index.js <br />
+                                    - app/components/Comments/index.js <br />
+                                    - app/components/Rating/Rating.js <br />
+                                    - app/components/Forms/SideReview.js <br />
+                                    - app/containers/Pages/Ecommerce/*.js <br />
+                                    - app/containers/Pages/Maintenance/index.js <br />
+                                    - app/containers/Pages/Photos/index.js <br />
+                                    - app/containers/Pages/ComingSoon/index.js <br />
+                                    - app/containers/Pages/AuthenticatedPage/index.js <br />
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>

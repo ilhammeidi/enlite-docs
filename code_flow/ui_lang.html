@@ -224,6 +224,32 @@ const initialState = {
                       </li>
                     </ul>
                   <br /><br />
+                <h4>Theme Palette Color</h4>
+                      <p>This theme has two theme mode, dark and light. To change default color you can find in</p>
+                      <ul>
+                        <li>Light mode: <code>app/api/palette/lightPalette.js</code></li>
+                        <li>Dark mode: <code>app/api/palette/darkPalette.js</code></li>
+                      </ul>
+                      <p>Every kind of themes has two palette, there are primary and secondary within light, main, dark and contrastText. Just change the value as you like. In example if you want to change <code>purpleRedTheme</code> in dark mode</p>
+                      <pre><code class="language-js">// app/api/palette/darkPalette.js
+purpleRedTheme: {
+  palette: {
+    primary: {
+      light: '#EDE7F6',
+      main: '#673AB7',
+      dark: '#512DA8',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#FCE4EC',
+      main: '#EC407A',
+      dark: '#C2185B',
+      contrastText: '#fff',
+    },
+  },
+},
+</code></pre>
+                      <br /><br />
                   <h4>UI Redux Architecture</h4>
                     <p>
                       This is UI architecture in diagram visuailzation. Click diagram or full screen button <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVBAMAAABbObilAAAAElBMVEUAAAAAAAAAAAAAAAAAAAAAAADgKxmiAAAABXRSTlMA758vX1Pw3BoAAABJSURBVAjXY8AJQkODGBhUQ0MhbAUGBiYY24CBgRnGFmZgMISwgwwDGRhEhVVBbAVmEQYGRwMmBjIAQi/CTIRd6G5AuA3dzYQBAHj0EFdHkvV4AAAAAElFTkSuQmCC" alt="full screen" />
