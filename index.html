@@ -66,6 +66,9 @@
                     <a href="#deploy">Deployment</a>
                 </li>
                 <li>
+                    <a href="#offline">Offline Access</a>
+                </li>
+                <li>
                     <a href="#shoot">Troubleshooting</a>
                 </li>
                 <li><h3>Start Coding</h3></li>
@@ -121,14 +124,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.5</h4>
+                        <h4>Version 1.6</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 23 Mar 2021
+                                Latest Update : 8 Jun 2021
                             </li>
                         </ul>
                     </div>
@@ -464,6 +467,91 @@
                               <br />
                               This is a default feature from React Boilerplate which has focus of 'offline first'.
                               So will make easier to build Progressive Web Aplication. But you can clear it by clear in local storage by following this step.
+                              <br /><br />
+                              <strong>Google Chrome and Opera</strong>
+                              <ol>
+                                <li>Open "Developer Tools" or Right click > Inspect element</li>
+                                <li>Then go to tab "Application"</li>
+                                <li>Choose "Clear Storage" in left sidebar</li>
+                                <li>Scroll down then You will see button "Clear site data"</li>
+                                <li>Just click it to clear all stored assets
+                                  <br />
+                                  <img src="images/chrome_clear_localstorage.png" width="600" alt="img" />
+                                </li>
+                              </ol>
+                              <br /><br />
+                              <strong>Safari and Firefox</strong>
+                              <ol>
+                                <li>Open "Developer Tools" or Right click > Inspect element</li>
+                                <li>Then go to tab "Storage"</li>
+                                <li>Choose "Local Storage" in left sidebar</li>
+                                <li>Just right click > Delete All
+                                  <br />
+                                  <img src="images/firefox_clear_localstorage.png" width="600" alt="img" />
+                                </li>
+                              </ol>
+                            </li>
+						</ul>
+                    </div>
+                </section>
+                <!-- END -->
+              
+              <!-- OFFLINE ACCESS -->
+                <section class="row" id="offline">
+                    <div class="col-lg-10">
+                        <h1>Offline Access</h1>
+                        <hr />
+                        <h4>Enable offline access</h4>
+                        <p>This is a feature from React Boilerplate which has focus of 'offline first'.
+                              So will make easier to build Progressive Web Aplication. The next frontier in performant web apps: availability without a network connection from the instant your users load the app.</p>
+						            <ul>
+                            <li>Open <code>app/app.js</code></li>
+                            <li>
+                              At very bottom just enable(uncomment) this code
+                              <pre><code class="language-js">if (process.env.NODE_ENV === 'production') {
+  require('offline-plugin/runtime').install(); // eslint-disable-line global-require
+}</code></pre>
+                            </li>
+                            <li>Next, open <code>/internals/webpack/webpack.prod.babel.js</code></li>
+                            <li>
+                              Then enable(uncomment) the offline-plugin import
+                              <pre><code class="language-js">const OfflinePlugin = require('offline-plugin');</code></pre>
+                              and enable(uncomment) OfflinePlugin webpack config around line:94
+                              <pre><code class="language-js">new OfflinePlugin({
+  relativePaths: false,
+  publicPath: '/',
+  appShell: '/',
+
+  // No need to cache .htaccess. See http://mxs.is/googmp,
+  // this is applied before any match in `caches` section
+  excludes: ['.htaccess'],
+
+  caches: {
+    main: [':rest:'],
+
+    // All chunks marked as `additional`, loaded after main section
+    // and do not prevent SW to install. Change to `optional` if
+    // do not want them to be preloaded at all (cached only when first loaded)
+    additional: ['*.chunk.js'],
+  },
+
+  // Removes warning for about `additional` section usage
+  safeToUseOptionalCaches: true,
+}),</code></pre>
+                            </li>
+                            <li>Go to console, then do the same as deployment method <a href="#run">above</a>. Build the site <pre><code class="language-js">npm run build</code></pre></li>
+                            <li>After finish run the site in production mode <pre><code class="language-js">npm run start:prod</code></pre></li>
+                            <li>Then navigate to <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+                            <li>
+                              <div class="alert alert-warning">
+                                  WARNING: Do not cache build/.htaccess and build/sw.js in your server, required for offline-first updates.
+                              </div>
+                            </li>
+                            <li><strong>Note:</strong> 
+                              After build finish then when you access it on local, all of the assets will be stored in local storage.
+                              So when You make a change the result will not update, because browser will take the code from cache.
+                              <br />
+                              But you can clear it by clear in local storage by following this step.
                               <br /><br />
                               <strong>Google Chrome and Opera</strong>
                               <ol>
@@ -1493,6 +1581,87 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.6 – 7 Jun, 2021</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Fixed: AuthWrapper login redirection
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - app/redux/modules/authSagas.js
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Fixed: Chart dimension warning
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  File changes: <br />
+                                  - app/containers/Charts/demos/*.js <br />
+                                  - app/components/Widget/*.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  Chore: Update react version and update some dependencies.
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  File changes: <br />
+                                  - package.json <br />
+                                  - app/index.html <br />
+                                  - app/styles/components/vendors/react-loading-bar/index.css <br />
+                                  - app/containers/App/ThemeWrapper.js <br />
+                                  - app/containers/Forms/demos/InlineWysiwyg.js <br />
+                                  - app/components/Tables/AdvTable.js <br />
+                                  - internals/scripts/dependencies.js <br />
+                                  - internals/webpack/webpack.base.babel.js <br />
+                                  - internals/webpack/webpack.prod.babel.js
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  Feature: change react-google-map to @react-google-maps/api
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  File changes: <br />
+                                  - app/containers/Maps/ <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  Disable offline access by default
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  File changes: <br />
+                                  - app/app.js <br />
+                                  - internals/webpack/webpack.prod.babel.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  Docs: Add guide how to enable offline access
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
