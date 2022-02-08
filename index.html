@@ -93,6 +93,9 @@
                 <li>
                     <a href="#eslint">Clean Code (Eslint)</a>
                 </li>
+                <li>
+                    <a href="#gmaps">Google Maps API</a>
+                </li>
                 <li><h3>Additional Info</h3></li>
                 <li>
                     <a href="#reference">External Reference</a>
@@ -124,14 +127,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.7</h4>
+                        <h4>Version 1.8</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 30 Aug 2021
+                                Latest Update : 8 Feb 2022
                             </li>
                         </ul>
                     </div>
@@ -1231,6 +1234,35 @@ export default {
                 </section>
                 <!-- END -->
               
+                <!-- GMAPS -->
+                <section id="gmaps">
+                  <div class="col-lg-10">
+                      <h1>Google Maps API Config</h1>
+                      <hr>
+                      <p>
+                        Google Maps Platform products are secured from unauthorized use by restricting API calls to those that provide proper authentication credentials. These credentials are in the form of an API key - a unique alphanumeric string that associates your Google billing account with your project, and with the specific API or SDK. For more details please check <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">https://developers.google.com/maps/documentation/javascript/get-api-key</a>
+                      </p>
+                      <h4>Before you begin</h4>
+                      <p>Before you start using the Maps JavaScript API, you need a project with a billing account and the
+                      Maps JavaScript API enabled. To learn more, see <a href="https://developers.google.com/maps/documentation/javascript/cloud-setup" target="_blank" class="gc-analytics-event" data-category="GMPgetAPIKeyPage" data-label="body" data-action="linkClick">Set up in Cloud Console</a>.
+                      </p>
+                      <h4>Creating API keys</h4>
+                      <p>The API key is a unique identifier that authenticates requests associated with your project for
+                      usage and billing purposes. You must have at least one API key associated with your project.</p>
+                      <p>To create an API key:</p>
+                      <ol>
+                        <li>Go to the Google Maps Platform &gt; Credentials page. <a href="https://console.cloud.google.com/project/_/google/maps-apis/credentials" target="_blank">https://console.cloud.google.com/project/_/google/maps-apis/credentials</a></li>
+                        <li>On the Credentials page, click Create credentials &gt; API key. The API key created dialog displays your newly created API key.</li>
+                        <li>Click Close.The new API key is listed on the Credentials page under API keys.(Remember to restrict the API key before using it in production.)</li>
+                      </ol>
+                      <h4>Adding the API key to your request</h4>
+                      <p>You must include an API key with every Maps JavaScript API request. In the following example, replace YOUR_API_KEY with your API key.</p>
+                      <pre class="  language-markup"><code class="  language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">async</span> <span class="token attr-name">defer</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&amp;callback=initMap<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+                  </div>
+                </section>
+                <!-- END -->
+              
                 <!-- FONTS -->
                 <section id="reference">
                     <h1>External Reference</h1>
@@ -1581,6 +1613,64 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.8 – 8 Feb, 2022</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Feature: Redux-persist to connect state with local storage
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - app/app.js <br />
+                                    - app/redux/configureStore.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Chore: Migrate from immutable.js to immer.js
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - app/app.js <br />
+                                    - app/components/**/*<br />
+                                    - app/containers/**/*<br />
+                                    - app/redux/**/*<br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Chore: update to react v17 and update another packages
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - package.json <br />
+                                    - app/components/**/*<br />
+                                    - app/containers/**/*<br />
+                                    - app/firebase/**/*<br />
+                                    - app/i18n.js<br />
+                                    - internals/webpack/webpack.base.babel.js<br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Docs: Add Google Maps setup
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
