@@ -127,14 +127,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.8</h4>
+                        <h4>Version 1.9</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 14 Feb 2022
+                                Latest Update : 25 Mar 2022
                             </li>
                         </ul>
                     </div>
@@ -146,7 +146,7 @@
                     <div class="col-lg-10">
                         <h1>What is Enlite Prime?</h1>
                         <hr />
-                        <img src="images/banner.png" alt="banner" class="img-thumbnail" />
+                        <img src="images/banner.jpg" alt="banner" class="img-thumbnail" />
                         <br /><br />
                         <article>
                             <p>
@@ -1186,42 +1186,43 @@ export default {
                           <li>Go to <code>internals/webpack/webpack.base.babel.js</code></li>
                           <li>
                             Just uncomment this code bellow
-                            <pre class=" language-js"><code class=" language-js">module<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    rules<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-      <span class="token comment">/*
-        Disabled eslint by default.
-        You can enable it to maintain and keep clean your code.
-        NOTE: By enable eslint running app process at beginning will slower
-      */</span>
-      <span class="token comment">//      {</span>
-      <span class="token comment">//        enforce: 'pre',</span>
-      <span class="token comment">//        test: /\.js?$/,</span>
-      <span class="token comment">//        exclude: [/node_modules/],</span>
-      <span class="token comment">//        loader: 'eslint-loader',</span>
-      <span class="token comment">//        options: {</span>
-      <span class="token comment">//          quiet: true,</span>
-      <span class="token comment">//        }</span>
-      <span class="token comment">//      },</span>
-      <span class="token punctuation">{</span></code></pre>
+                            <pre class=" language-js"><code class=" language-js"><span class="token comment">//  const ESLintPlugin = require('eslint-webpack-plugin');</span>
+plugins: options.plugins.concat([<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">/*
+      Disabled eslint by default.
+      You can enable it to maintain and keep clean your code.
+      NOTE: By enable eslint running app process at beginning will slower
+    */</span>
+    <span class="token comment">//      new ESLintPlugin({</span>
+    <span class="token comment">//        extensions: 'js',</span>
+    <span class="token comment">//        exclude: 'node_modules',</span>
+    <span class="token comment">//        failOnWarning: true,</span>
+    <span class="token comment">//        failOnError: true,</span>
+    <span class="token comment">//        emitError: true,</span>
+    <span class="token comment">//        emitWarning: true,</span>
+    <span class="token comment">//      }),</span>
+<span class="token comment">});</span>
+    </code></pre>
                           </li>
                           <li>
                             Then should become like this
-                            <pre class=" language-js"><code class=" language-js">module<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-    rules<span class="token punctuation">:</span> <span class="token punctuation">[</span>
-      <span class="token comment">/*
-        Disabled eslint by default.
-        You can enable it to maintain and keep clean your code.
-        NOTE: By enable eslint running app process at beginning will slower
-      */</span>
-      <span class="token punctuation">{</span>
-        enforce<span class="token punctuation">:</span> <span class="token string">'pre'</span><span class="token punctuation">,</span>
-        test<span class="token punctuation">:</span> <span class="token regex">/\.js?$/</span><span class="token punctuation">,</span>
-        exclude<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token regex">/node_modules/</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-        loader<span class="token punctuation">:</span> <span class="token string">'eslint-loader'</span><span class="token punctuation">,</span>
-        options<span class="token punctuation">:</span> <span class="token punctuation">{</span>
-          quiet<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span></code></pre>
+                            <pre class=" language-js"><code class=" language-js"><span class="token comment">const ESLintPlugin = require('eslint-webpack-plugin');</span>
+plugins: options.plugins.concat([<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">/*
+      Disabled eslint by default.
+      You can enable it to maintain and keep clean your code.
+      NOTE: By enable eslint running app process at beginning will slower
+    */</span>
+  <span class="token comment">      new ESLintPlugin({</span>
+  <span class="token comment">        extensions: 'js',</span>
+  <span class="token comment">        exclude: 'node_modules',</span>
+  <span class="token comment">        failOnWarning: true,</span>
+  <span class="token comment">        failOnError: true,</span>
+  <span class="token comment">        emitError: true,</span>
+  <span class="token comment">        emitWarning: true,</span>
+  <span class="token comment">      }),</span>
+<span class="token comment">});</span>
+    </code></pre>
                           </li>
                           <li>
                             Run the project <code>npm start</code>.<br>
@@ -1613,6 +1614,60 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.9 – 25 Mar, 2022</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Chore: Upgrade to webpack 5
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - .npmrc <br />
+                                    - app/app.js <br />
+                                    - app/containers/App/index.js <br />
+                                    - app/containers/Forms/demos/DateTimeInput.js <br />
+                                    - app/redux/reducers.js <br />
+                                    - app/styles/theme/applicationTheme.js <br />
+                                    - internals/webpack/webpack.base.babel.js <br />
+                                    - internals/webpack/webpack.dev.babel.js <br />
+                                    - internals/webpack/webpack.prod.babel.js <br />
+                                    - package.json <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Fixed: Bug views
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - app/containers/Widgets/demos/ChartInfographic.js <br />
+                                    - app/styles/theme/applicationTheme.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Chore: Fixed some deprecated dependecies
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - package.json <br />
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
