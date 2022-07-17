@@ -223,6 +223,24 @@ const initialState = {
     </code></pre>
                       </li>
                     </ul>
+                <br /><br />
+                      <h4>Permanent UI Setting</h4>
+                      <p><strong>All UI configuration above will be reseted once page reload.</strong> To make it permanent you can store the config in local storage with <strong>redux-persist</strong> plugins.</p>
+                      <ul>
+                        <li>Open <code>app/redux/configureStore.js</code></li>
+                        <li>
+                          In <code>persistConfig.whitelist</code> add the reducer name<code>['ui']</code>
+                          <pre><code class="language-js">// file: app/redux/configureStore.js
+const persistConfig = {
+  key: 'dandelion',
+  storage,
+  whitelist: ['ui']
+};                          
+                          </code></pre>
+                        </li>
+                        <li>Make some UI changes, i.e dark-mode then reload the browser, then ui changes will be persisted.</li>
+                        <li>Note: you can also add another reducer name to <code>whitelist</code> to save the state in local storage. If you want to reset them, just clear the local storage.</li>
+                      </ul>
                   <br /><br />
                 <h4>Theme Palette Color</h4>
                       <p>This theme has two theme mode, dark and light. To change default color you can find in</p>
