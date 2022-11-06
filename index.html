@@ -127,14 +127,14 @@
                         <h1 class="title">Thank you for Purchasing </h1>
                         <br /><br />
                         <h3>Enlite Prime - React Admin Dashboard Template For Full-Stack Developer</h3>
-                        <h4>Version 1.9.1</h4>
+                        <h4>Version 1.9.3</h4>
                         <hr />
                         <ul>
                             <li>
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 2 Jul 2022
+                                Latest Update : 7 Nov 2022
                             </li>
                         </ul>
                     </div>
@@ -592,6 +592,38 @@
                         <p>Here's most common error problem when installation and first setup project</p>
                         <div class="accordion" id="accordionExample">
                           <div class="card">
+                            <div class="card-header" id="headingDeprecated">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseDeprecated" aria-expanded="true" aria-controls="collapseOne">
+                                  Installation Problem: Dependencies Error Deprecation
+                                </button>
+                              </h5>
+                            </div>
+
+                            <div id="collapseDeprecated" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      When installation and you got error like this :<br>
+                                      <pre class=" language-js"><code class=" language-js">
+Could not resolve dependency<span class="token punctuation">:</span>
+peer example<span class="token operator">-</span>peer<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token string">"^3.2.0"</span> <span class="token keyword">from</span> example<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token number">3.0</span><span class="token number">.0</span>
+example<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token number">3.0</span><span class="token number">.0</span> <span class="token keyword">from</span> the root project
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      Try to remove the error package (i.e example-package@3.0.0) from <code>package.json</code> Then install again. 
+                                      <pre class=" language-js"><code class=" language-js">npm install</code></pre>
+                                      After installation done, try to install the problematic package manually with <code>--legacy-peer-deps</code> options. 
+                                      <pre class=" language-js"><code class=" language-js">npm install example<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token number">3.0</span><span class="token number">.0</span> <span class="token operator">--</span>legacy<span class="token operator">-</span>peer<span class="token operator">-</span>deps</code></pre>
+                                      Example for multiple packages
+                                      <pre class=" language-js"><code class=" language-js">npm install example<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token number">3.0</span><span class="token number">.0</span> other<span class="token operator">-</span><span class="token keyword">package</span>@<span class="token number">1.0</span><span class="token number">.0</span> <span class="token operator">--</span>legacy<span class="token operator">-</span>peer<span class="token operator">-</span>deps</code></pre>
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card">
                             <div class="card-header" id="headingOne">
                               <h5 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -600,7 +632,7 @@
                               </h5>
                             </div>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                               <div class="card-body">
                                 <ul>
                                   <li>
@@ -622,6 +654,50 @@
                                     </li>
                                     <li>
                                       if still got an error. Try to update the problematic package instead.
+                                    </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card">
+                            <div class="card-header" id="headingNode18">
+                              <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseNode18" aria-expanded="true" aria-controls="collapseOne">
+                                  Running Problem: Node Version &gt;= 18
+                                </button>
+                              </h5>
+                            </div>
+
+                            <div id="collapseNode18" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                              <div class="card-body">
+                                <ul>
+                                  <li>
+                                      When you run npm run dev, build, etc, then you got error like this:
+                                      <pre class=" language-js"><code class=" language-js">
+Error<span class="token punctuation">:</span> error<span class="token punctuation">:</span><span class="token number">0308010</span>C<span class="token punctuation">:</span>digital envelope routines<span class="token punctuation">:</span><span class="token punctuation">:</span>unsupported
+    at <span class="token keyword">new</span> <span class="token class-name">Hash</span> <span class="token punctuation">(</span>node<span class="token punctuation">:</span>internal<span class="token operator">/</span>crypto<span class="token operator">/</span>hash<span class="token punctuation">:</span><span class="token number">67</span><span class="token punctuation">:</span><span class="token number">19</span><span class="token punctuation">)</span>
+    at Object<span class="token punctuation">.</span><span class="token function">createHash</span> <span class="token punctuation">(</span>node<span class="token punctuation">:</span>crypto<span class="token punctuation">:</span><span class="token number">130</span><span class="token punctuation">:</span><span class="token number">10</span><span class="token punctuation">)</span>
+        </code></pre>
+                                    </li>
+                                    <li>
+                                      Open terminal and paste these as described:
+                                      <ol>
+                                        <li>
+                                          Linux and macOS (Windows Git Bash)
+                                          <pre class=" language-js"><code class=" language-js"><span class="token keyword">export</span> <span class="token constant">NODE_OPTIONS</span><span class="token operator">=</span><span class="token operator">--</span>openssl<span class="token operator">-</span>legacy<span class="token operator">-</span>provider</code></pre>
+                                        </li>
+                                        <li>
+                                          Windows command prompt
+                                          <pre class=" language-js"><code class=" language-js"><span class="token keyword">set</span> <span class="token constant">NODE_OPTIONS</span><span class="token operator">=</span><span class="token operator">--</span>openssl<span class="token operator">-</span>legacy<span class="token operator">-</span>provider</code></pre>
+                                        </li>
+                                        <li>
+                                          Windows PowerShell
+                                          <pre class=" language-js"><code class=" language-js">$env<span class="token punctuation">:</span><span class="token constant">NODE_OPTIONS</span> <span class="token operator">=</span> <span class="token string">"--openssl-legacy-provider"</span></code></pre>
+                                        </li>
+                                      </ol>
+                                    </li>
+                                    <li>
+                                      Then try <code>npm run dev</code> or <code>npm run build</code> again
                                     </li>
                                 </ul>
                               </div>
@@ -1614,6 +1690,61 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.9.3 – 7 Nov, 2022</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Fixed: Node v18 error start and build
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - package.json <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Docs: Installation deprecation error
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped log">
+                            <thead>
+                              <tr>
+                                <th>
+                                    <strong>Version 1.9.2 – 16 Oct, 2022</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>
+                                    Chore: Remove unused dependencies
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    File changes:<br />
+                                    - package.json <br />
+                                    - internals/config.js <br />
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Docs: Redux Persist configuration
+                                </td>
+                              </tr>
+                            </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
