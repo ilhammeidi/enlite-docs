@@ -114,7 +114,7 @@
                 </li>
             </ul>
 
-            <span class="copy">&copy; Copyright 2021 - Enlite Prime</span>
+            <span class="copy">&copy; Copyright 2023 - Enlite Prime</span>
         </div>
         <!-- /#sidebar-wrapper -->
 
@@ -134,7 +134,7 @@
                                 Created : 13 May 2019
                             </li>
                             <li>
-                                Latest Update : 7 Nov 2022
+                                Latest Update : 6 Feb 2023
                             </li>
                         </ul>
                     </div>
@@ -503,79 +503,81 @@
                 <section class="row" id="offline">
                     <div class="col-lg-10">
                         <h1>Offline Access</h1>
-                        <hr />
+                        <hr>
                         <h4>Enable offline access</h4>
                         <p>This is a feature from React Boilerplate which has focus of 'offline first'.
                               So will make easier to build Progressive Web Aplication. The next frontier in performant web apps: availability without a network connection from the instant your users load the app.</p>
 						            <ul>
-                            <li>Open <code>app/app.js</code></li>
                             <li>
+                              Open <code>app/app.js</code>
                               At very bottom just enable(uncomment) this code
-                              <pre><code class="language-js">if (process.env.NODE_ENV === 'production') {
-  require('offline-plugin/runtime').install(); // eslint-disable-line global-require
-}</code></pre>
+                              <pre class=" language-js"><code class=" language-js"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">'serviceWorker'</span> <span class="token keyword">in</span> navigator<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  window<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'load'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    navigator<span class="token punctuation">.</span>serviceWorker<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token string">'/service-worker.js'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>registration <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'SW registered: '</span><span class="token punctuation">,</span> registration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span>registrationError <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'SW registration failed: '</span><span class="token punctuation">,</span> registrationError<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
                             </li>
-                            <li>Next, open <code>/internals/webpack/webpack.prod.babel.js</code></li>
-                            <li>
-                              Then enable(uncomment) the offline-plugin import
-                              <pre><code class="language-js">const OfflinePlugin = require('offline-plugin');</code></pre>
-                              and enable(uncomment) OfflinePlugin webpack config around line:94
-                              <pre><code class="language-js">new OfflinePlugin({
-  relativePaths: false,
-  publicPath: '/',
-  appShell: '/',
-
-  // No need to cache .htaccess. See http://mxs.is/googmp,
-  // this is applied before any match in `caches` section
-  excludes: ['.htaccess'],
-
-  caches: {
-    main: [':rest:'],
-
-    // All chunks marked as `additional`, loaded after main section
-    // and do not prevent SW to install. Change to `optional` if
-    // do not want them to be preloaded at all (cached only when first loaded)
-    additional: ['*.chunk.js'],
-  },
-
-  // Removes warning for about `additional` section usage
-  safeToUseOptionalCaches: true,
-}),</code></pre>
+                            <li>Next, open <code>/internals/webpack/webpack.prod.babel.js</code>
+                              Then enable(uncomment) the webpack plugin import
+                              <pre class=" language-js"><code class=" language-js"><span class="token keyword">const</span> WorkboxPlugin <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'workbox-webpack-plugin'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+                              and enable(uncomment) WorkboxPlugin webpack config around line:87
+                              <pre class=" language-js"><code class=" language-js"><span class="token keyword">new</span> <span class="token class-name">WorkboxPlugin<span class="token punctuation">.</span>GenerateSW</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token comment">// these options encourage the ServiceWorkers to get in there fast</span>
+  <span class="token comment">// and not allow any straggling "old" SWs to hang around</span>
+  clientsClaim<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  navigateFallback<span class="token punctuation">:</span> <span class="token string">'/index.html'</span><span class="token punctuation">,</span>
+  skipWaiting<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  maximumFileSizeToCacheInBytes<span class="token punctuation">:</span> <span class="token number">5242880</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span></code></pre>
                             </li>
-                            <li>Go to console, then do the same as deployment method <a href="#run">above</a>. Build the site <pre><code class="language-js">npm run build</code></pre></li>
-                            <li>After finish run the site in production mode <pre><code class="language-js">npm run start:prod</code></pre></li>
+                            <li>Go to console, then do the same as deployment method <a href="#run">above</a>. Build the site <pre class=" language-js"><code class=" language-js">npm run build</code></pre></li>
+                            <li>After finish run the site in production mode <pre class=" language-js"><code class=" language-js">npm run start<span class="token punctuation">:</span>prod</code></pre></li>
                             <li>Then navigate to <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
                             <li>
                               <div class="alert alert-warning">
-                                  WARNING: Do not cache build/.htaccess and build/sw.js in your server, required for offline-first updates.
+                                  WARNING: Do not cache build/.htaccess and build/service-worker.js in your server, required for offline-first updates.
                               </div>
                             </li>
-                            <li><strong>Note:</strong> 
+                            <li>
+                              <strong>Note 1:</strong>
+                              With this feature all scripts will be stored in Local Storage, so can be accessed even offline.
+                              And if any updates, The service-worker.js will handle it when browser reload or re-open the site.
+                              <strong>Once update received, the site won't changes immediately, because the status is pending/waiting,
+                              Please run the second reload to set the update as active.</strong>
+                              <br>
+                              <img src="images/sw.png" width="400" alt="sw">
+                            </li>
+                            <li><strong>Note 2:</strong> 
                               After build finish then when you access it on local, all of the assets will be stored in local storage.
                               So when You make a change the result will not update, because browser will take the code from cache.
-                              <br />
+                              <br>
                               But you can clear it by clear in local storage by following this step.
-                              <br /><br />
+                              <br><br>
                               <strong>Google Chrome and Opera</strong>
                               <ol>
-                                <li>Open "Developer Tools" or Right click > Inspect element</li>
+                                <li>Open "Developer Tools" or Right click &gt; Inspect element</li>
                                 <li>Then go to tab "Application"</li>
                                 <li>Choose "Clear Storage" in left sidebar</li>
                                 <li>Scroll down then You will see button "Clear site data"</li>
                                 <li>Just click it to clear all stored assets
-                                  <br />
-                                  <img src="images/chrome_clear_localstorage.png" width="600" alt="img" />
+                                  <br>
+                                  <img src="images/chrome_clear_localstorage.png" width="600" alt="img">
                                 </li>
                               </ol>
-                              <br /><br />
+                              <br><br>
                               <strong>Safari and Firefox</strong>
                               <ol>
-                                <li>Open "Developer Tools" or Right click > Inspect element</li>
+                                <li>Open "Developer Tools" or Right click &gt; Inspect element</li>
                                 <li>Then go to tab "Storage"</li>
                                 <li>Choose "Local Storage" in left sidebar</li>
-                                <li>Just right click > Delete All
-                                  <br />
-                                  <img src="images/firefox_clear_localstorage.png" width="600" alt="img" />
+                                <li>Just right click &gt; Delete All
+                                  <br>
+                                  <img src="images/firefox_clear_localstorage.png" width="600" alt="img">
                                 </li>
                               </ol>
                             </li>
@@ -1690,6 +1692,44 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                     <div class="col-lg-10">
                         <h1>Change Log</h1>
                         <hr />
+                        <table class="table table-striped log">
+                          <thead>
+                            <tr>
+                              <th>
+                                  <strong>Version 2.0.0 – 6 Feb, 2023</strong>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                Feature: Add Service Worker
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                File changes: <br>
+                                - package.json <br>
+                                - app/app.js <br>
+                                - internals/webpack/webpack.prod.babel.js <br>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Chore: Upgrade to Material UI 5
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                File changes: <br>
+                                - package.json <br>
+                                - app/components/*.js <br>
+                                - app/containers/*.js <br>
+                                - app/styles/theme/applicationTheme.js <br>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                         <table class="table table-striped log">
                             <thead>
                               <tr>
