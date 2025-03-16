@@ -159,7 +159,7 @@
                                 This template contains more than 30 components based on material-ui designs. And also various sample pages
                                 like <strong>Landing page, 2 Dashboards variant, and Profile.</strong>
                                 Not stop until that, the backend integration is one of our focus in this template.
-                                <strong>Firebase authentication</strong> with email and social login, <strong>pre-build CRUD apps</strong> with Firebase realtime DB and Redux Saga.
+                                <strong>Firebase authentication</strong> with email and social login, <strong>pre-build CRUD apps</strong> with Firebase realtime DB and Redux Toolkit.
                                 That all for you to boost your web app development process. Enlite Prime is the template you will love to work on.
                             </p>
                         </article>
@@ -186,7 +186,7 @@
                                 <strong>Authentication</strong>. Use Firebase social and email login
                             </li>
                             <li>
-                                <strong>Pre-build apps</strong>. Sample CRUD app with Redux-Saga and Realtime DB integration.
+                                <strong>Pre-build apps</strong>. Sample CRUD app with Redux-Toolkit and Realtime DB integration.
                             </li>
                             <li>
                                 <strong>Support multilanguage</strong>. Including 6 translation English, Deutsch, Arabic, Chinese, Bahasa Indonesia, Español.
@@ -313,7 +313,6 @@
 │   │   ├── es.json
 │   │   ├── id.json
 │   │   └── zh.json
-│   └── utils         # redux saga configuration
 ├── dump_data         # Sample data dump
 │   └── enlite-3a841-export.json
 ├── firebase.json
@@ -1157,16 +1156,12 @@ export default SamplePage;
                         <hr />
                         <p>This is the CRUD flow to explain how the sample Pre-build apps works.</p>
                         <p>
-                          Before we go through to the apps, first important thing to combine all reducer and sagas
+                          Before we go through to the apps, first important thing to combine all reducer
                         </p>
                         <ul>
                           <li>
-                            <strong>Combine saga's</strong><br />
-                            file: <code>app\utils\sagas.js</code>
-                          </li>
-                          <li>
                             <strong>Combine reducers</strong><br />
-                            file: <code>app\redux\reducers.js</code>
+                            file: <code>app/redux/reducers.js</code>
                           </li>
                         </ul>
                         <div class="part-categories">
@@ -1645,16 +1640,6 @@ import BatteryStd from '@material-ui/icons/BatteryStd';
                               <tr>
                                 <td class="tg-yw4l">redux-form</td>
                                 <td class="tg-yw4l">https://github.com/erikras/redux-form-material-ui</td>
-                                <td class="tg-yw4l">MIT</td>
-                              </tr>
-                              <tr>
-                                <td class="tg-yw4l">redux-saga</td>
-                                <td class="tg-yw4l">https://github.com/redux-saga/redux-saga/tree/master/packages/core</td>
-                                <td class="tg-yw4l">MIT</td>
-                              </tr>
-                              <tr>
-                                <td class="tg-yw4l">redux-saga-firebase</td>
-                                <td class="tg-yw4l">https://github.com/n6g7/redux-saga-firebase</td>
                                 <td class="tg-yw4l">MIT</td>
                               </tr>
                               <tr>

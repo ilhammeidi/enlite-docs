@@ -69,117 +69,67 @@
     <!-- main content -->
     <div id="page-content-wrapper">
       <div class="container-fluid">
-        <!-- DIAGRAM -->
-        <section class="row" id="diagram">
-          <br /><br />
-          <div class="col-lg-10">
-            <h1>Contact Diagram</h1>
-            <hr />
-            <iframe frameborder="0" style="width:100%;height:680px;" src="../diagram/contact_structure.html"></iframe>
-          </div>
-        </section>
-        <!-- END -->
         <section class="row" id="read">
           <br /><br />
           <div class="col-lg-10">
             <h1>Read / Fetch</h1>
             <hr />
             <br />
-            <h4>Constant</h4>
+            <h4>API Redux Toolkit Query (RTK)</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactConstants.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\services\contactApi.js</code></li>
               <li>
-                Define constant:
+                Call fetch action in API function
                 <pre>
                   <code class="language-js">
-export const FETCH_CONTACT = 'FETCH_CONTACT';
-export const FETCH_CONTACT_SUCCESS = 'FETCH_CONTACT_SUCCESS';
-export const FETCH_CONTACT_FAILED = 'FETCH_CONTACT_FAILED';
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Actions</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactActions.js</code></li>
-              <li>
-                Put each constant in actions
-                <pre>
-                  <code class="language-js">
-/* Load */
-export const loadContactSuccess = payload => ({
-  type: types.FETCH_CONTACT_SUCCESS,
-  payload,
-});
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Saga</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactSagas.js</code></li>
-              <li>
-                Call load task action in saga's function
-                <pre>
-                  <code class="language-js">
-function* read() {
-  const channel = yield call(subscribe);
-  while (true) {
-    const action = yield take(channel);
-    yield put(action);
-  }
-}
+fetchContacts: builder.query({
+  queryFn: async () => {
+    const contactRef = child(dbRef, 'contacts/');
+    const querySnapshot = await get(contactRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      }
+      return false;
+    }).catch((error) => error);
 
-function* watchContact() {
-  while (true) {
-    contactList.path = 'contacts/';
-    const job = yield fork(read);
-
-    yield take([FETCH_CONTACT]);
-    yield cancel(job);
-  }
-}
+    const contacts = Object.keys(querySnapshot).map(key => ({
+      id: key,
+      ...querySnapshot[key]
+    }));
+    return { data: contacts.reverse() };
+  },
+  providesTags: ['Contact'],
+}),
                   </code>
                 </pre>
               </li>
               <li>
-                Subscribe from <strong>models</strong>
+                Refetch data changes
                 <pre>
                   <code class="language-js">
-import ContactModels from '../models';
-import Init from '../models/init';
-
-import { loadContactSuccess } from './contactActions';
-
-const contactList = new ContactModels({
-  onLoad: loadContactSuccess,
-}, Init);
-
-function subscribe() {
-  return eventChannel(emit => contactList.subscribe(emit));
-}
+refetchContact: builder.mutation({
+  queryFn: async () => ({
+    data: null
+  }),
+  invalidatesTags: ['Contact'],
+}),
 
                   </code>
                 </pre>
               </li>
             </ul>
             <br />
-            <h4>Reducer</h4>
+            <h4>Reducer/Slice</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactReducer.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\reducers\contactSlice.js</code></li>
               <li>
-                Put all payload action with constant <strong>FETCH_CONTACT_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                Set local state to load items in front-end side
                 <pre>
                   <code class="language-js">
-case FETCH_CONTACT_SUCCESS:
-  return state.withMutations((mutableState) => {
-    const items = fromJS(action.payload);
-    mutableState
-      .set('contactList', new List(items))
-      .set('loading', false);
-  });
+fetchData: (state, action) => {
+  const items = action.payload;
+  state.contactList = items;
+},
                   </code>
                 </pre>
               </li>
@@ -187,29 +137,36 @@ case FETCH_CONTACT_SUCCESS:
             <br />
             <h4>Container</h4>
             <ul>
-              <li>File: <code>\app\containers\SampleFullstackApps\Contact\index.js</code></li>
+              <li>File: <code>\app\containers\SampleFirebaseApps\Contact\index.js</code></li>
               <li>
-                Load state data to container as prop
+                Load state data to container
                 <pre>
                   <code class="language-js">
-const { dataContact } = this.props;
+import { useFetchContactsQuery } from './services/contactApi';
+import { fetchData } from './reducers/contactSlice';
 
-const mapStateToProps = state => ({
-  dataContact: state.getIn([reducer, 'contactList']),
-});
+const dataContact = useSelector(state => state.contactFb.contactList);
+
+const { data, isLoading } = useFetchContactsQuery();
+
+const dispatch = useDispatch();
+
+useEffect(() => {
+  dispatch(fetchData(data));
+}, [data]);
 
 return {
   &lt;ContactList
     addFn
-    total={dataContact.size}
-    addContact={add}
+    total={dataContact && dataContact.length}
+    addContact={() => dispatch(add())}
     clippedRight
     itemSelected={itemSelected}
-    dataContact={dataContact}
-    showDetail={showDetail}
-    search={search}
     keyword={keyword}
-    loading={loading}
+    search={(payload) => dispatch(search(payload))}
+    dataContact={dataContact}
+    loading={isLoading}
+    showDetail={(payload) => dispatch(showDetail(payload))}
   /&gt;
 }
                   </code>
@@ -232,12 +189,12 @@ const getItem = dataArray => dataArray.map(data => {
   return (
     &lt;ListItem
       button
-      key={data.get('key')}
+      key={data.id}
       className={index === itemSelected ? classes.selected : ''}
       onClick={() =&gt; showDetail(data)}
     &gt;
-      &lt;Avatar alt={data.get('name')} src={data.get('avatar')} className={classes.avatar} /&gt;
-      &lt;ListItemText primary={data.get('name')} secondary={data.get('title')} /&gt;
+      &lt;Avatar alt={data.name} src={data.avatar} className={classes.avatar} /&gt;
+      &lt;ListItemText primary={data.name} secondary={data.title'} /&gt;
     &lt;/ListItem&gt;
   );
 });
@@ -253,68 +210,29 @@ const getItem = dataArray => dataArray.map(data => {
             <h1>Create</h1>
             <hr />
             <br />
-            <h4>Constant</h4>
+            <h4>API Redux Toolkit Query (RTK)</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactConstants.js</code></li>
+              <li>File: <code> app\containers\SampleFirebaseApps\Contact\services\contactApi.js</code></li>
               <li>
-                Define constant
+                Call submit contact item in API function
                 <pre>
                   <code class="language-js">
-export const CREATE_CONTACT = 'CREATE_CONTACT';
-export const CREATE_CONTACT_SUCCESS = 'CREATE_CONTACT_SUCCESS';
-export const CREATE_CONTACT_FAILED = 'CREATE_CONTACT_FAILED';                  
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Actions</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactActions.js</code></li>
-              <li>
-                Put each constant in actions
-                <pre>
-                  <code class="language-js">
-export const createAction = payload => ({
-  type: types.CREATE_CONTACT,
-  payload,
-});
+submitContact: builder.mutation({
+  queryFn: async (payload) => {
+    const contactId = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
 
-export const createActionSuccess = payload => ({
-  type: types.CREATE_CONTACT_SUCCESS,
-  payload,
-});
+    await set(ref(db, 'contacts/' + contactId), payload)
+      .then(() => {
+        console.info('submit success');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-export const createActionFailed = error => ({
-  type: types.CREATE_CONTACT_FAILED,
-  payload: { error },
-});                
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Saga</h4>
-            <ul>
-              <li>File: <code> app\containers\SampleFullstackApps\Contact\reducers\contactSagas.js</code></li>
-              <li>
-                Define create models
-                <pre>
-                  <code class="language-js">
-const createContact = write.bind(null, contactList, contactList.push, createActionFailed);             
-                  </code>
-                </pre>
-              </li>
-              <li>
-                Call create contact action in saga's function
-                <pre>
-                  <code class="language-js">
-function* watchCreateContact() {
-  while (true) {
-    const { payload } = yield take(CREATE_CONTACT);
-    yield fork(createContact, payload);
-  }
-}           
+    return { data: null };
+  },
+  invalidatesTags: ['Contact'],
+}),        
                   </code>
                 </pre>
               </li>
@@ -322,21 +240,16 @@ function* watchCreateContact() {
             <br />
             <h4>Reducer</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\todoReducer.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\reducers\contactSlice.js</code></li>
               <li>
-                Put all payload action with constant <strong>CREATE_CONTACT_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                Set local state to update UI changes
                 <pre>
                   <code class="language-js">
-case CREATE_CONTACT_SUCCESS:
-  return state.withMutations((mutableState) => {
-    const items = action.payload;
-    mutableState.set('contactList', state.get('contactList').unshift(items));
-    mutableState
-      .set('formValues', Map())
-      .set('avatarInit', '')
-      .set('openFrm', false)
-      .set('notifMsg', notif.saved);
-  });        
+submit: (state) => {
+  state.selectedIndex = 0;
+  state.avatarInit = '';
+  state.openFrm = false;
+},
                   </code>
                 </pre>
               </li>
@@ -344,23 +257,51 @@ case CREATE_CONTACT_SUCCESS:
             <br />
             <h4>Container</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\index.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\index.js</code></li>
               <li>
                 Dispatch create action in container
                 <pre>
                   <code class="language-js">
-import { createAction } from './reducers/contactActions';    
+import { useSubmitContactMutation } from './services/contactApi';
+import { submit } from './reducers/contactSlice';
 
-const constDispatchToProps = dispatch => ({
-  create: bindActionCreators(createAction, dispatch),
-});
+
+const [submitContact] = useSubmitContactMutation();
+
+const handleSubmit = (item, avatar) => {
+  let value = {};
+  setUploadSubmiting(true);
+
+  if (item.id === selectedId) { // Update contact
+    const contact = dataContact[itemSelected];
+    dispatch(update());
+    if (typeof avatar === 'object') {
+      uploadImg(avatar, async (url) => {
+        value = { ...item, avatar: url || null };
+        updateContact({ contact, change: value });
+        setUploadSubmiting(false);
+      });
+    } else {
+      updateContact({ contact, change: item });
+      setUploadSubmiting(false);
+    }
+  } else { // Create new contact
+    dispatch(submit());
+    uploadImg(avatar, async (url) => {
+      value = { ...item, avatar: url || null };
+      submitContact(value);
+      setUploadSubmiting(false);
+    });
+  }
+};
 
 return (
   &lt;AddContact
-    addContact={add}
+    initialValues={initVal}
+    addContact={() => dispatch(add())}
     openForm={open}
-    closeForm={close}
-    submit={this.submitContact}
+    closeForm={() => dispatch(closeForm())}
+    submit={(value, avatar) => handleSubmit(value, avatar)}
     avatarInit={avatarInit}
     processing={uploadSubmiting}
   /&gt;
@@ -377,17 +318,23 @@ return (
                 Get and submit New Contact
                                 <pre>
                   <code class="language-js">
-sendValues = (values) => {
-  const { submit } = this.props;
-  const { img } = this.state;
-  setTimeout(() => {
-    submit(values, img);
-    this.setState({ img: null });
-  }, 500);
-}
+const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
+const formik = useFormik({
+  initialValues,
+  enableReinitialize: true,
+  validationSchema,
+  onSubmit: async (values) => {
+    await sleep(500);
+    sendValues(values);
+    await sleep(500);
+    formik.resetForm({
+      values: initialValues
+    });
+  },
+});
 
 return (
-  &lt;form onSubmit={this.handleSubmit} noValidate&gt;
+  &lt;form onSubmit={formik.handleSubmit} noValidate&gt;
      ...
   &lt;/form&gt;
 )
@@ -402,141 +349,100 @@ return (
           <div class="col-lg-10">
             <h1>Update</h1>
             <hr />
-            <h4>Constant</h4>
-            <br />
+            <h4>API Redux Toolkit Query (RTK)</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactConstants.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\services\contactApi.js</code></li>
               <li>
-                Define constant
+                Call update task action API function
                 <pre>
                   <code class="language-js">
-export const UPDATE_CONTACT = 'UPDATE_CONTACT';
-export const UPDATE_CONTACT_SUCCESS = 'UPDATE_CONTACT_SUCCESS';
-export const UPDATE_CONTACT_FAILED = 'UPDATE_CONTACT_FAILED';
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactActions.js</code></li>
-              <li>
-                Put each constant in actions
-                <pre>
-                  <code class="language-js">
-export const updateAction = (contact, changes) => ({
-  type: types.UPDATE_CONTACT,
-  payload: { contact, changes },
-});
+updateContact: builder.mutation({
+  queryFn: async (payload) => {
+    const { contact, change } = payload;
+    const updates = {};
 
-export const updateActionSuccess = payload => ({
-  type: types.UPDATE_CONTACT_SUCCESS,
-  payload
-});
+    updates['/contacts/' + contact.id] = { ...contact, ...change };
+    await update(ref(db), updates).then(() => {
+      console.info('update success');
+    }).catch((error) => {
+      console.error(error);
+    });
 
-export const updateActionFailed = error => ({
-  type: types.UPDATE_CONTACT_FAILED,
-  payload: { error },
-});
+    return { data: null };
+  },
+  invalidatesTags: ['Contact'],
+}),
                   </code>
                 </pre>
               </li>
             </ul>
             <br />
-            <h4>Saga</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactSagas.js</code></li>
-              <li>
-                Define <strong>update models</strong>
-                <pre>
-                  <code class="language-js">
-const updateContact = write.bind(null, contactList, contactList.update, updateActionFailed);
-                  </code>
-                </pre>
-              </li>
-              <li>
-                Call update contact action in saga's function
-                <pre>
-                  <code class="language-js">
-function* watchUpdateContact() {
-  while (true) {
-    const { payload } = yield take(UPDATE_CONTACT);
-    yield fork(updateContact, payload.contact.key, payload.changes);
-  }
-}
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
+            
+            
             <h4>Reducer</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\todoReducer.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\reducers\contactSlice.js</code></li>
               <li>
-                Put all payload action with constant <strong>UPDATE_CONTACT_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
+                Set local state to update UI changes
                 <pre>
                   <code class="language-js">
-case UPDATE_CONTACT_SUCCESS:
-  return state.withMutations((mutableState) => {
-    mutableState.set(
-      'contactList',
-      state.get('contactList').map(contact => (contact.key === action.payload.key ? action.payload : contact))
-    );
-    mutableState
-      .set('formValues', Map())
-      .set('avatarInit', '')
-      .set('openFrm', false)
-      .set('notifMsg', notif.updated);
-  });
+update: (state) => {
+  state.avatarInit = '';
+  state.openFrm = false;
+},
                   </code>
                 </pre>
               </li>
             </ul>
             <br />
+            
+            
             <h4>Container</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\index.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\index.js</code></li>
               <li>
                 Dispatch update action in container. Basically <strong>create</strong> and <strong>update</strong> has same value and data type, so we create condition to handle it.
                 <pre>
                   <code class="language-js">
-import { updateAction } from './reducers/contactActions';
+import { useUpdateContactMutation } from './services/contactApi';
+import { update } from './reducers/contactSlice';
 
-const constDispatchToProps = dispatch => ({
-  update: bindActionCreators(updateAction, dispatch),
-});
+const [updateContact] = useUpdateContactMutation();
 
-submitContact = (item, avatar) => {
-    const {
-      create, update,
-      dataContact, itemSelected, selectedId,
-    } = this.props;
+const handleSubmit = (item, avatar) => {
+  let value = {};
+  setUploadSubmiting(true);
 
-    const value = item.toJS();
-    this.setState({ uploadSubmiting: true });
-
-    if (value.key === selectedId) { // Update contact
-      const contact = dataContact.get(itemSelected);
+  if (item.id === selectedId) { // Update contact
+    const contact = dataContact[itemSelected];
+    dispatch(update());
+    if (typeof avatar === 'object') {
       uploadImg(avatar, async (url) => {
-        value.avatar = url || null;
-        update(contact, value);
-        this.setState({ uploadSubmiting: false });
+        value = { ...item, avatar: url || null };
+        updateContact({ contact, change: value });
+        setUploadSubmiting(false);
       });
-    } else { // Create new contact
-      uploadImg(avatar, async (url) => {
-        value.avatar = url || null;
-        create(value);
-        this.setState({ uploadSubmiting: false });
-      });
+    } else {
+      updateContact({ contact, change: item });
+      setUploadSubmiting(false);
     }
+  } else { // Create new contact
+    dispatch(submit());
+    uploadImg(avatar, async (url) => {
+      value = { ...item, avatar: url || null };
+      submitContact(value);
+      setUploadSubmiting(false);
+    });
   }
+};
   
 return (
   &lt;AddContact
-    addContact={add}
+    initialValues={initVal}
+    addContact={() => dispatch(add())}
     openForm={open}
-    closeForm={close}
-    submit={this.submitContact}
+    closeForm={() => dispatch(closeForm())}
+    submit={(value, avatar) => handleSubmit(value, avatar)}
     avatarInit={avatarInit}
     processing={uploadSubmiting}
   /&gt;
@@ -553,17 +459,23 @@ return (
                 Get and submit Updated Contact
                 <pre>
                   <code class="language-js">
-sendValues = (values) => {
-  const { submit } = this.props;
-  const { img } = this.state;
-  setTimeout(() => {
-    submit(values, img);
-    this.setState({ img: null });
-  }, 500);
-}
+const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
+const formik = useFormik({
+  initialValues,
+  enableReinitialize: true,
+  validationSchema,
+  onSubmit: async (values) => {
+    await sleep(500);
+    sendValues(values);
+    await sleep(500);
+    formik.resetForm({
+      values: initialValues
+    });
+  },
+});
 
 return (
-  &lt;form onSubmit={this.handleSubmit} noValidate&gt;
+  &lt;form onSubmit={formik.handleSubmit} noValidate&gt;
      ...
   &lt;/form&gt;
 )
@@ -578,89 +490,29 @@ return (
           <div class="col-lg-10">
             <h1>Delete</h1>
             <hr />
-            <h4>Constant</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactConstants.js</code></li>
-              <li>
-                Define constant
-                <pre>
-                  <code class="language-js">
-export const DELETE_CONTACT = 'DELETE_CONTACT';
-export const DELETE_CONTACT_SUCCESS = 'DELETE_CONTACT_SUCCESS';
-export const DELETE_CONTACT_FAILED = 'DELETE_CONTACT_FAILED';
-                  </code>
-                </pre>
-              </li>
-            </ul>
             <br />
-            <h4>Actions</h4>
+            <h4>API Redux Toolkit Query (RTK)</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactActions.js</code></li>
-              <li>
-                Put each constant in actions
-                <pre>
-                  <code class="language-js">
-/* Delete */
-export const deleteAction = payload => ({
-  type: types.DELETE_CONTACT,
-  payload,
-});
-
-export const deleteActionSuccess = payload => ({
-  type: types.DELETE_CONTACT_SUCCESS,
-  payload,
-});
-
-export const deleteActionFailed = error => ({
-  type: types.DELETE_CONTACT_FAILED,
-  payload: { error },
-});
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Saga</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\contactSagas.js</code></li>
-              <li>
-                Define <strong>update models</strong>
-                <pre>
-                  <code class="language-js">
-const removeContact = write.bind(null, contactList, contactList.remove, deleteActionFailed);
-                  </code>
-                </pre>
-              </li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\services\contactApi.js</code></li>
               <li>
                 Call remove contact action in saga's function
                 <pre>
                   <code class="language-js">
-function* watchRemoveContact() {
-  while (true) {
-    const { payload } = yield take(DELETE_CONTACT);
-    yield fork(removeContact, payload.key);
-  }
-}
-                  </code>
-                </pre>
-              </li>
-            </ul>
-            <br />
-            <h4>Reducer</h4>
-            <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\reducers\todoReducer.js</code></li>
-              <li>
-                Put all payload action with constant <strong>DELETE_CONTACT_SUCCESS</strong> in reducer state. So the font-end part (React components) can get the state to modify ui or contents.
-                <pre>
-                  <code class="language-js">
-return state.withMutations((mutableState) => {
-    mutableState
-      .set(
-        'contactList',
-        state.get('contactList').filter(contact => contact.key !== action.payload.key)
-      )
-      .set('notifMsg', notif.removed);
-  });
+removeContact: builder.mutation({
+  queryFn: async (contact) => {
+    const contactId = contact.id;
+
+    await remove(ref(db, 'contacts/' + contactId))
+      .then(() => {
+        console.info('delete success');
+      }).catch((error) => {
+        console.error(error);
+      });
+
+    return { data: null };
+  },
+  invalidatesTags: ['Contact'],
+}),
                   </code>
                 </pre>
               </li>
@@ -668,27 +520,30 @@ return state.withMutations((mutableState) => {
             <br />
             <h4>Container</h4>
             <ul>
-              <li>File: <code>app\containers\SampleFullstackApps\Contact\index.js</code></li>
+              <li>File: <code>app\containers\SampleFirebaseApps\Contact\index.js</code></li>
               <li>
                 Dispatch remove action in container
                 <pre>
                   <code class="language-js">
-import { deleteAction } from './reducers/contactActions';
+import { useRemoveContactMutation } from './services/contactApi';
 
-const constDispatchToProps = dispatch => ({
-  remove: bindActionCreators(deleteAction, dispatch),
-});
+const [removeContact] = useRemoveContactMutation();
+
+const handleRemove = (item) => {
+  removeContact(item);
+  setMessage(notif.removed);
+};
 
 return (
   &lt;ContactDetail
     showMobileDetail={showMobileDetail}
-    hideDetail={hideDetail}
+    hideDetail={() => dispatch(hideDetail())}
     dataContact={dataContact}
     itemSelected={itemSelected}
-    edit={edit}
-    remove={remove}
-    favorite={update}
-    loading={loading}
+    edit={(payload) => dispatch(edit(payload))}
+    remove={(contact) => handleRemove(contact)}
+    favorite={(contact) => handleFavorite(contact)}
+    loading={isLoading}
   /&gt;
 )
 
@@ -704,14 +559,13 @@ return (
                 Call remove function by onClick remove button
                 <pre>
                   <code class="language-js">
-deleteContact = (item) => {
-  const { remove } = this.props;
+const deleteContact = (item) => {
   remove(item);
-  this.setState({ anchorElOpt: null });
-}
+  setAnchorElOpt(null);
+};
 
 return (
-  &lt;MenuItem onClick={() => this.deleteContact(dataContact.get(itemSelected))}&gt;
+  &lt;MenuItem onClick={() => deleteContact(dataContact[itemSelected])}&gt;
     &lt;FormattedMessage {...messages.delete} /&gt;
   &lt;/MenuItem&gt;
 )
